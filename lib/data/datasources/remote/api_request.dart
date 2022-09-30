@@ -10,9 +10,13 @@ import 'dto/cart_dto.dart';
 class ApiRequest  {
   late Dio _dio;
 
+
   ApiRequest(){
+ 
     _dio = DioClient.instance.dio;
   }
+
+
 
   Future signIn(String email, String password) {
     return _dio.post(ApiConstant.SIGN_IN_URL, data: {
@@ -38,28 +42,33 @@ class ApiRequest  {
   Future getCart() {
     return _dio.get(ApiConstant.CART_URL);
   }
-  Future<CartDto> fetchCart() {
-    Completer<CartDto> completer = Completer();
-    getCart().then((response){
-      AppResponse<CartDto> dataResponse = AppResponse.fromJson(response.data, CartDto.convertJson);
-      completer.complete(dataResponse.data);
-    }).catchError((error) {
-      if (error is DioError) {
-        completer.completeError((error).response?.data["message"]);
-      } else {
-        completer.completeError(error);
-      }
-    });
-    return completer.future;
+  Future getOrder() {
+    return _dio.get(ApiConstant.ORDER_HISTORY_URL);
   }
+
+ //  Future<CartDto> fetchCart() {
+ // ApiRequest apiRequest = ApiRequest();
+ //    Completer<CartDto> completer = Completer();
+ //  apiRequest._dio.get(ApiConstant.CART_URL).then((response){
+ //      AppResponse<CartDto> cartData = AppResponse.fromJson(response.data , CartDto.convertJson);
+ //      completer.complete(cartData.data);
+ //    }).catchError((error) {
+ //      if (error is DioError) {
+ //        completer.completeError((error).response?.data["message"]);
+ //      } else {
+ //        completer.completeError(error);
+ //      }
+ //    });
+ //    return completer.future;
+ //  }
   Future<CartDto> addCart(String idProduct) {
     Completer<CartDto> completer = Completer();
     _dio.post(ApiConstant.ADD_CART_URL,  data: {
       "id_product": idProduct
     })
         .then((response){
-      AppResponse<CartDto> dataResponse = AppResponse.fromJson(response.data, CartDto.convertJson);
-      completer.complete(dataResponse.data);
+      AppResponse<CartDto> cartResponse = AppResponse.fromJson(response.data, CartDto.convertJson);
+      completer.complete(cartResponse.data);
     }).catchError((error) {
       if (error is DioError) {
         completer.completeError((error).response?.data["message"]);

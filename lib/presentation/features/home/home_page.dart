@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> handleButtonSignOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.clear();
+     print('log out ');
     // Navigator.pushNamed(context, "/sign_in"); back navigator
     Navigator.pushReplacementNamed(context, VariableConstant.SIGN_IN_ROUTE);
   }
@@ -37,13 +38,13 @@ class _HomePageState extends State<HomePage> {
         leading: IconButton(
           icon: Icon(Icons.logout),
           onPressed: () {
-            handleButtonSignOut();
+            // handleButtonSignOut();
           },
         ),
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, "/order-history");
+                Navigator.pushNamed(context, "/order");
               },
               icon: Icon(Icons.description)
           ),
@@ -54,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator
                       .pushNamed(context, "/cart")
                       .then((cartModelUpdate){
-                    if (cartModelUpdate != null) {
+                    if (cartModelUpdate !=null ) {
                       bloc.cartController.sink.add(cartModelUpdate as Cart);
                     }
                   });

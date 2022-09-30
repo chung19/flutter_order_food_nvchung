@@ -28,9 +28,9 @@ class CartPage extends StatelessWidget {
         ),
         ProxyProvider<CartRepository, CartBloc>(
           update: (context, repository, bloc) {
-            bloc?.setRepository( cartRepository: repository);
+            bloc?.updateRepository( cartRepository: repository);
             return bloc ?? CartBloc()
-              ..setRepository( cartRepository: repository);
+              ..updateRepository( cartRepository: repository);
           },
         ),
       ],
@@ -94,20 +94,18 @@ class _CartContainerState extends State<CartContainer> {
                           itemBuilder: (lstContext, index) => _buildItem(snapshot.data?.products?[index])),
                     ),
                     Container(
-                        margin: EdgeInsets.symmetric(vertical: 10),
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
                             color: Colors.teal,
                             borderRadius: BorderRadius.all(Radius.circular(5))),
                         child: Text(
-                            "Tổng tiền : " +
-                                NumberFormat("#,###", "en_US")
-                                    .format(_cart?.price) +
-                                " đ",
-                            style: TextStyle(fontSize: 25, color: Colors.white))),
+                            "Tổng tiền : ${NumberFormat("#,###", "en_US")
+                                    .format(_cart?.price)} đ",
+                            style: const TextStyle(fontSize: 25, color: Colors.white))),
                     Container(
-                        margin: EdgeInsets.only(bottom: 10),
-                        padding: EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.all(10),
                         child: ElevatedButton(
                           onPressed: () {
                             if (_cart != null) {

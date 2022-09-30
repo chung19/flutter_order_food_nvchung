@@ -10,15 +10,15 @@ class CartDto {
   });
 
   CartDto.fromJson(dynamic json) {
-    id = json['_id'];
+    id = json['_id'] as String;
     if (json['products'] != null) {
-      products = [];
+      products = [] ;
       json['products'].forEach((v) {
         products?.add(ProductDto.fromJson(v));
       });
     }
-    idUser = json['id_user'];
-    price = json['price'];
+    idUser = json['id_user'] as String;
+    price = json['price']  ;
   }
 
   String? id;

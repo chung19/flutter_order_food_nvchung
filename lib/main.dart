@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_order_food_nvchung/presentation/features/order/order_page.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/sign_in/sign_in_page.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/sign_up/sign_up_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'common/constants/variable_constant.dart';
 import 'data/datasources/local/cache/app_cache.dart';
-import 'data/datasources/remote/api_request.dart';
 import 'presentation/features/cart/cart_page.dart';
 import 'presentation/features/home/home_page.dart';
 import 'presentation/features/splash/splash_page.dart';
@@ -34,6 +33,7 @@ class MyApp extends StatelessWidget {
         VariableConstant.HOME_ROUTE: (context) => HomePage(),
         VariableConstant.SPLASH_ROUTE: (context) => SplashPage(),
         VariableConstant.CART_ROUTE: (context) =>CartPage(),
+        VariableConstant.ORDER_ROUTE: (context) =>OrderPage(),
       },
       initialRoute: VariableConstant.SPLASH_ROUTE,
     );
