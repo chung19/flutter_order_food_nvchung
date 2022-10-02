@@ -35,7 +35,7 @@ class CartPage extends StatelessWidget {
         ),
       ],
       appBar: AppBar(
-        title: Text("Cart"),
+        title: const Center(child: Text("Cart")),
       ),
       child: CartContainer(),
     );
@@ -77,14 +77,14 @@ class _CartContainerState extends State<CartContainer> {
             builder: (context, snapshot) {
               if (snapshot.hasError) {
                 return Center(
-                  child: Text("${snapshot.error.toString()}"),
+                  child: Text(snapshot.error.toString()),
                 );
               }
 
               if (snapshot.hasData) {
                 _cart = snapshot.data;
                 if (snapshot.data == null || snapshot.data!.products!.isEmpty) {
-                  return Text("Data empty");
+                  return const Text("Data empty");
                 }
                 return Column(
                   children: [
@@ -116,7 +116,7 @@ class _CartContainerState extends State<CartContainer> {
                           style: ButtonStyle(
                               backgroundColor:
                               MaterialStateProperty.all(Colors.deepOrange)),
-                          child: Text("Confirm",
+                          child: const Text("Confirm",
                               style: TextStyle(color: Colors.white, fontSize: 25)),
                         )),
                   ],
@@ -132,13 +132,13 @@ class _CartContainerState extends State<CartContainer> {
   }
 
   Widget _buildItem(Product? product) {
-    return Container(
+    return SizedBox(
       height: 135,
       child: Card(
         elevation: 5,
         shadowColor: Colors.blueGrey,
         child: Container(
-          padding: EdgeInsets.only(top: 5, bottom: 5),
+          padding: const EdgeInsets.only(top: 5, bottom: 5),
           child: Row(
             children: [
               Padding(
@@ -164,31 +164,31 @@ class _CartContainerState extends State<CartContainer> {
                         child: Text((product?.name).toString(),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 16)),
+                            style: const TextStyle(fontSize: 16)),
                       ),
                       Text(
                           "Giá : " +
                               NumberFormat("#,###", "en_US")
                                   .format(product?.price) +
                               " đ",
-                          style: TextStyle(fontSize: 12)),
+                          style: const TextStyle(fontSize: 12)),
                       Row(
                         children: [
                           ElevatedButton(
                             onPressed: () {
                               if (product != null && _cart != null ) {
-                                String cartId = _cart!.id ??= "";
-                                if (cartId.isNotEmpty) {
-                                  _bloc.eventSink.add(UpdateCartEvent(idCart: cartId, idProduct: product.id, quantity: product.quantity - 1 as int));
+                                String? cartId = _cart?.id;
+                                if (cartId?.isNotEmpty == true) {
+                                  _bloc.eventSink.add(UpdateCartEvent(idCart: cartId!, idProduct: product.id, quantity: product.quantity - 1 as int));
                                 }
                               }
                             },
-                            child: Text("-"),
+                            child: const Text("-"),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             child: Text((product?.quantity).toString(),
-                                style: TextStyle(fontSize: 16)),
+                                style: const TextStyle(fontSize: 16)),
                           ),
                           ElevatedButton(
                             onPressed: () {
@@ -199,7 +199,7 @@ class _CartContainerState extends State<CartContainer> {
                                 }
                               }
                             },
-                            child: Text("+"),
+                            child: const Text("+"),
                           ),
                         ],
                       )

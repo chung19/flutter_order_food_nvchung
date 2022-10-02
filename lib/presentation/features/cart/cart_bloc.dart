@@ -68,28 +68,42 @@ class CartBloc extends BaseBloc {
     loadingSink.add(false);
   }
 
-  void updateCart(UpdateCartEvent event) {
+  void updateCart(UpdateCartEvent event)  async{
     loadingSink.add(true);
-    _cartRepository.updateCart(event.idCart, event.quantity, event.idProduct).then((cartData) {
+    try{
+    Response response = await  _cartRepository.updateCart(event.idCart, event.quantity, event.idProduct);
+    AppResponse<CartDto> cartResponse =
+    AppResponse.fromJson(response.data, CartDto.convertJson);
       cartController.sink.add(Cart(
-          cartData.id,
-          cartData.products?.map((data) {
+          cartResponse.data?.id,
+          cartResponse.data?.products?.map((data) {
             return Product(data.id, data.name, data.address, data.price,
                 data.img, data.quantity, data.gallery);
           }).toList(),
-          cartData.price));
-    }).catchError((e) {
-      message.sink.add(e.toString());
-    }).whenComplete(() => loadingSink.add(false));
+          cartResponse.data?.price));
+     }
+     on DioError catch (e) {
+  cartController.sink.addError(e.response?.data["message"]);
+  messageSink.add(e.response?.data["message"]);
+  } catch (e) {
+  messageSink.add(e.toString());
   }
+  loadingSink.add(false);
+}
 
-  void conform(CartConform event) {
+  void conform(CartConform event) async {
     loadingSink.add(true);
-    _cartRepository.confirmCart(event.idCart).then((cartData) {
+    try{
+      Response response = await  _cartRepository.confirmCart(event.idCart);
+    AppResponse.fromJson(response.data, CartDto.convertJson);
       cartController.sink.add(Cart("", [], -1));
-    }).catchError((e) {
-      message.sink.add(e.toString());
-    }).whenComplete(() => loadingSink.add(false));
+    } on DioError catch (e) {
+      cartController.sink.addError(e.response?.data["message"]);
+      messageSink.add(e.response?.data["message"]);
+    } catch (e) {
+      messageSink.add(e.toString());
+    }
+    loadingSink.add(false);
   }
 
   @override

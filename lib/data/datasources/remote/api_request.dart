@@ -7,25 +7,20 @@ import 'app_response.dart';
 import 'dio_client.dart';
 import 'dto/cart_dto.dart';
 
-class ApiRequest  {
+class ApiRequest {
   late Dio _dio;
 
-
-  ApiRequest(){
- 
+  ApiRequest() {
     _dio = DioClient.instance.dio;
   }
 
-
-
   Future signIn(String email, String password) {
-    return _dio.post(ApiConstant.SIGN_IN_URL, data: {
-      "email": email,
-      "password": password
-    });
+    return _dio.post(ApiConstant.SIGN_IN_URL,
+        data: {"email": email, "password": password});
   }
 
-  Future signUp(String email, String name, String phone, String password, String address) {
+  Future signUp(String email, String name, String phone, String password,
+      String address) {
     return _dio.post(ApiConstant.SIGN_UP_URL, data: {
       "email": email,
       "password": password,
@@ -42,74 +37,28 @@ class ApiRequest  {
   Future getCart() {
     return _dio.get(ApiConstant.CART_URL);
   }
+
   Future getOrder() {
     return _dio.get(ApiConstant.ORDER_HISTORY_URL);
   }
 
- //  Future<CartDto> fetchCart() {
- // ApiRequest apiRequest = ApiRequest();
- //    Completer<CartDto> completer = Completer();
- //  apiRequest._dio.get(ApiConstant.CART_URL).then((response){
- //      AppResponse<CartDto> cartData = AppResponse.fromJson(response.data , CartDto.convertJson);
- //      completer.complete(cartData.data);
- //    }).catchError((error) {
- //      if (error is DioError) {
- //        completer.completeError((error).response?.data["message"]);
- //      } else {
- //        completer.completeError(error);
- //      }
- //    });
- //    return completer.future;
- //  }
-  Future<CartDto> addCart(String idProduct) {
-    Completer<CartDto> completer = Completer();
-    _dio.post(ApiConstant.ADD_CART_URL,  data: {
-      "id_product": idProduct
-    })
-        .then((response){
-      AppResponse<CartDto> cartResponse = AppResponse.fromJson(response.data, CartDto.convertJson);
-      completer.complete(cartResponse.data);
-    }).catchError((error) {
-      if (error is DioError) {
-        completer.completeError((error).response?.data["message"]);
-      } else {
-        completer.completeError(error);
-      }
-    });
-    return completer.future;
+  Future addCart(String idProduct) {
+    return _dio.post(ApiConstant.ADD_CART_URL, data: {"id_product": idProduct});
   }
-  Future<CartDto> updateCart(String idCart, int quantity, String idProduct) {
-    Completer<CartDto> completer = Completer();
-    _dio.post(ApiConstant.CART_UPDATE_URL,  data: {
+
+  Future updateCart(String idCart, int quantity, String idProduct) {
+
+   return _dio.post(ApiConstant.CART_UPDATE_URL, data: {
       "id_product": idProduct,
       "id_cart": idCart,
-      "quantity": quantity})
-        .then((response){
-      AppResponse<CartDto> dataResponse = AppResponse.fromJson(response.data, CartDto.convertJson);
-      completer.complete(dataResponse.data);
-    }).catchError((error) {
-      if (error is DioError) {
-        completer.completeError((error).response?.data["message"]);
-      } else {
-        completer.completeError(error);
-      }
+      "quantity": quantity
     });
-    return completer.future;
+
   }
-  Future<String> confirmCard(String idCart) {
-    Completer<String> completer = Completer();
-    _dio.post(ApiConstant.CART_CONFORM_URL,  data: {
-      "id_cart": idCart,
-      "status": false})
-        .then((response){
-      completer.complete(response.data["data"]);
-    }).catchError((error) {
-      if (error is DioError) {
-        completer.completeError((error).response?.data["message"]);
-      } else {
-        completer.completeError(error);
-      }
-    });
-    return completer.future;
+
+  Future  confirmCard (String idCart) {
+  return  _dio.post(ApiConstant.CART_CONFORM_URL,
+        data: {"id_cart": idCart, "status": false});
+
   }
 }
