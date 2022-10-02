@@ -8,4 +8,6 @@ class VariableConstant {
   static final String SPLASH_ROUTE = "/splash";
   static final String CART_ROUTE = "/cart";
   static final String ORDER_ROUTE = "/order";
+  static final String IMG = " ApiConstant.BASE_URL + product.img";
+
 }

@@ -43,6 +43,7 @@ dependencies:
   lottie: ^1.1.0
   intl: ^0.17.0
   badges: ^2.0.3
+  carousel_slider: ^4.1.1
 
 dev_dependencies:
   flutter_test:

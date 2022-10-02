@@ -17,6 +17,7 @@ class Product {
     this.gallery = gallery ?? [];
   }
 
+
   @override
   String toString() {
     return 'Product{id: $id, name: $name, address: $address, price: $price, img: $img, quantity: $quantity, gallery: $gallery}';

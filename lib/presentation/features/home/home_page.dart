@@ -1,5 +1,7 @@
 import 'package:badges/badges.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_order_food_nvchung/common/bases/base_widget.dart';
 import 'package:flutter_order_food_nvchung/data/model/product.dart';
 import 'package:flutter_order_food_nvchung/data/repositories/cart_repository.dart';
@@ -11,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/constants/api_constant.dart';
 import '../../../common/constants/variable_constant.dart';
+import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../data/datasources/remote/api_request.dart';
 import '../../../data/model/cart.dart';
@@ -34,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Center(child: Text("Home")),
         leading: IconButton(
           icon: Icon(Icons.logout),
           onPressed: () {
@@ -46,7 +49,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.pushNamed(context, "/order");
               },
-              icon: Icon(Icons.description)
+              icon: Icon(Icons.history)
           ),
           Consumer<HomeBloc>(
             builder: (context, bloc, child){
@@ -64,21 +67,16 @@ class _HomePageState extends State<HomePage> {
                     initialData: null,
                     stream: bloc.cartController.stream,
                     builder: (context, snapshot) {
-                      if (snapshot.hasError || snapshot.data == null || snapshot.data?.products.isEmpty == true) {
-                        return Container(   child: Text(" ctr"),);
+                      if (snapshot.hasError) {
+                        return Container(  );
                       }
-                      String? count = snapshot.data?.products.length.toString();
+                      String? count = snapshot.data?.products?.length.toString();
                       if (count == null || count.isEmpty || count == "0") {
                         return Container(
-
-                          margin: const EdgeInsets.only(right: 10, top: 10),
-                          child: Badge(
-                            // badgeContent: Text(count.toString(), style: const TextStyle(
-                            //     color: Colors.white),),
-                            child: Icon(Icons.shopping_cart_outlined),
-                          ),
+                          margin: EdgeInsets.only(right: 10, top: 10),
+                          child: Icon(Icons.shopping_cart_outlined),
                         );
-                      }else {
+                      } else {
                         return Container(
                           margin: EdgeInsets.only(right: 10, top: 10),
                           child: Badge(
@@ -134,19 +132,63 @@ class _HomeContainerState extends State<HomeContainer> {
     _homeBloc.eventSink.add(GetListProductEvent());
     _homeBloc.eventSink.add(FetchCartEvent());
     // _homeBloc.eventSink.add(FetchCartEvent());
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _homeBloc.messageStream.listen((event) {
+        showMessage(context, "Thông Báo", event);
+      });
+    });
 
   }
 
+  SafeArea handleButtonDetail(String email, String password) {
+
+      showMessage(context, "Thông báo", ""
+      );
+     return SafeArea(
+          child: Container(
+            child: Stack(
+              children: [
+                StreamBuilder<List<Product>>(
+                    initialData: [],
+                    stream: _homeBloc.listProductController.stream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Container(
+                          child: Center(child: Text("Data error")),
+                        );
+                      }
+                      if (snapshot.hasData && snapshot.data == []) {
+                        return Container();
+                      }
+                      return ListView.builder(
+                          itemCount: snapshot.data?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            // return _buildItemFood(snapshot.data?[index]);
+                            return _buildItemFood(snapshot.data?[index]);
+                          }
+                      );
+                    }
+                ),
+
+                LoadingWidget(
+                  bloc: _homeBloc,
+                  child: Container(),
+                )
+              ],
+            ),
+          )
+      );
 
 
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Container(
           child: Stack(
             children: [
-              StreamBuilder<List<Product>> (
-                  initialData:  [],
+              StreamBuilder<List<Product>>(
+                  initialData: [],
                   stream: _homeBloc.listProductController.stream,
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
@@ -160,6 +202,7 @@ class _HomeContainerState extends State<HomeContainer> {
                     return ListView.builder(
                         itemCount: snapshot.data?.length ?? 0,
                         itemBuilder: (context, index) {
+                          // return _buildItemFood(snapshot.data?[index]);
                           return _buildItemFood(snapshot.data?[index]);
                         }
                     );
@@ -211,19 +254,23 @@ class _HomeContainerState extends State<HomeContainer> {
                               .format(product.price)} đ",
                           style: const TextStyle(fontSize: 12)),
                       Row(
-                          children:[
+                          children: [
                             ElevatedButton(
                               onPressed: () {
                                 print('test add cart');
-                                _homeBloc.eventSink.add(AddCartEvent(idProduct: product.id));
+                                _homeBloc.eventSink.add(
+                                    AddCartEvent(idProduct: product.id));
                               },
                               style: ButtonStyle(
                                   backgroundColor:
                                   MaterialStateProperty.resolveWith((states) {
-                                    if (states.contains(MaterialState.pressed)) {
-                                      return const Color.fromARGB(200, 240, 102, 61);
+                                    if (states.contains(
+                                        MaterialState.pressed)) {
+                                      return const Color.fromARGB(
+                                          200, 240, 102, 61);
                                     } else {
-                                      return const Color.fromARGB(230, 240, 102, 61);
+                                      return const Color.fromARGB(
+                                          230, 240, 102, 61);
                                     }
                                   }),
                                   shape: MaterialStateProperty.all(
@@ -231,20 +278,29 @@ class _HomeContainerState extends State<HomeContainer> {
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10))))),
                               child:
-                              const Text("Thêm vào giỏ", style: TextStyle(fontSize: 14)),
+                              const Text("Thêm vào giỏ",
+                                  style: TextStyle(fontSize: 14)),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 5),
                               child: ElevatedButton(
                                 onPressed: () {
+                                  setState(() {
+
+
+
+                                  });
                                 },
                                 style: ButtonStyle(
                                     backgroundColor:
                                     MaterialStateProperty.resolveWith((states) {
-                                      if (states.contains(MaterialState.pressed)) {
-                                        return const Color.fromARGB(200, 11, 22, 142);
+                                      if (states.contains(
+                                          MaterialState.pressed)) {
+                                        return const Color.fromARGB(
+                                            200, 11, 22, 142);
                                       } else {
-                                        return const Color.fromARGB(230, 11, 22, 142);
+                                        return const Color.fromARGB(
+                                            230, 11, 22, 142);
                                       }
                                     }),
                                     shape: MaterialStateProperty.all(
@@ -252,7 +308,8 @@ class _HomeContainerState extends State<HomeContainer> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(10))))),
                                 child:
-                                Text("Chi tiết", style: const TextStyle(fontSize: 14)),
+                                Text("Chi tiết",
+                                    style: const TextStyle(fontSize: 14)),
                               ),
                             ),
                           ]
@@ -267,5 +324,23 @@ class _HomeContainerState extends State<HomeContainer> {
       ),
     );
   }
+  Widget _buildSlider(Product?   product, BuildContext context ) {
+
+    if (product == null) return Container();
+    return  CarouselSlider.builder(
+
+        itemCount: product.gallery[0].length,
+        itemBuilder: (BuildContext context, int itemIndex, int
+        pageViewIndex) =>
+            Container(
+              child: Image.network(ApiConstant.BASE_URL + product.gallery[0]),
+            ),
+
+
+        options: CarouselOptions(),
+    );
+  }
+
 }
+
 

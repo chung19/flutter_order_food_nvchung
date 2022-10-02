@@ -4,17 +4,12 @@ import '../datasources/remote/api_request.dart';
 
 class CartRepository extends BaseRepository{
 
-
-
-
-
   Future getCart() {
     return apiRequest.getCart();
   }
 
-
   Future addCart(String idProduct) {
-    ApiRequest apiRequest =ApiRequest();
+    // ApiRequest apiRequest =ApiRequest();
     return apiRequest.addCart(idProduct);
   }
   Future updateCart(String idCart, int quantity,String  idProduct){
