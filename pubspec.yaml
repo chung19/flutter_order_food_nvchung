@@ -44,7 +44,7 @@ dependencies:
   intl: ^0.17.0
   badges: ^2.0.3
   carousel_slider: ^4.1.1
-
+  cached_network_image: ^3.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

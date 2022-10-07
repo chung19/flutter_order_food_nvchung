@@ -110,7 +110,7 @@ class _CartContainerState extends State<CartContainer> {
                           onPressed: () {
                             if (_cart != null) {
                               String idCart = _cart!.id ??= "";
-                              _bloc.eventSink.add(CartConform(idCart: idCart));
+                              _bloc.eventSink.add(CartConform(idCart: idCart,));
                             }
                           },
                           style: ButtonStyle(
@@ -146,7 +146,7 @@ class _CartContainerState extends State<CartContainer> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: Image.network(
-                      ApiConstant.BASE_URL + (product?.img).toString(),
+                      ApiConstant.baseUrl + (product?.img).toString(),
                       width: 150,
                       height: 120,
                       fit: BoxFit.fill),

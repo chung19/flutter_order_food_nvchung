@@ -12,7 +12,7 @@ import '../../../data/datasources/remote/dto/product_dto.dart';
 import '../../../data/repositories/cart_repository.dart';
 
 class HomeBloc extends BaseBloc {
-  StreamController<List<Product>> listProductController = StreamController();
+  StreamController<List<Product>> listProductController = StreamController.broadcast();
   StreamController<Cart> cartController = StreamController();
   StreamController<String> message = StreamController();
   late ProductRepository _repository;
@@ -55,12 +55,12 @@ class HomeBloc extends BaseBloc {
     loadingSink.add(false);
   }
 
-  void _addCart(AddCartEvent event) async{
+  void _addCart(AddCartEvent event) async {
     loadingSink.add(true);
     try {
       Response response = await _cartRepository.addCart(event.idProduct);
       AppResponse<CartDto> cartResponse =
-      AppResponse.fromJson(response.data, CartDto.convertJson);
+          AppResponse.fromJson(response.data, CartDto.convertJson);
       Cart cart = Cart(
         cartResponse.data?.id,
         cartResponse.data?.products?.map((dto) {
@@ -79,51 +79,6 @@ class HomeBloc extends BaseBloc {
     }
     loadingSink.add(false);
   }
-
-  void _addCartt(AddCartEvent event) async {
-    loadingSink.add(true);
-    try {
-      Response response = await _cartRepository.addCart(event.idProduct);
-      AppResponse<CartDto> cartResponse =
-          AppResponse.fromJson(response.data, CartDto.convertJson);
-      Cart cart = Cart(
-        cartResponse.data?.id,
-        cartResponse.data?.products
-            ?.map((model) => Product(model.id, model.name, model.address,
-                model.price, model.img, model.quantity, model.gallery))
-            .toList(),
-        cartResponse.data?.price,
-        cartResponse.data?.idUser,
-      );
-      cartController.sink.add(cart);
-    } on DioError catch (e) {
-      message.sink.add(e.toString());
-    }
-    loadingSink.add(false);
-  }
-
-//get cart == get all  value card
-//   void _fetchCart(GetCartEvent event) {
-//     loadingSink.add(true);
-//       _cartRepository
-//         .fetchCard()
-//         .then((cartData) => cartController.sink.add(Cart(
-//         cartData.id,
-//         cartData.products
-//             ?.map((model) => Product(
-//             model.id,
-//             model.name,
-//             model.address,
-//             model.price,
-//             model.img,
-//             model.quantity,
-//             model.gallery))
-//             .toList(),
-//         cartData.price)))
-//         .catchError((e) {
-//       message.sink.add(e.toString());
-//     }).whenComplete(() => loadingSink.add(false));
-//   }
 
   void _fetchCart() async {
     loadingSink.add(true);

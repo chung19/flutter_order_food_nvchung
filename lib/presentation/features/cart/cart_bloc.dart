@@ -28,19 +28,10 @@ class CartBloc extends BaseBloc {
         updateCart(event as UpdateCartEvent);
         break;
       case CartConform:
-        conform(event as CartConform);
+       oldconform(event as CartConform);
         break;
     }
   }
-  // void dispatch(BaseEvent event) {
-  //   if (event is FetchCartEvent) {
-  //     getCart();
-  //   } else if (event is UpdateCartEvent) {
-  //     updateCart(event);
-  //   } else if (event is CartConform) {
-  //     conform(event);
-  //   }
-  // }
 
 
   void fetchCart() async {
@@ -94,18 +85,26 @@ class CartBloc extends BaseBloc {
   void conform(CartConform event) async {
     loadingSink.add(true);
     try{
-      Response response = await  _cartRepository.confirmCart(event.idCart);
+      Response response = (await  _cartRepository.confirmCart(event.idCart)) as Response;
     AppResponse.fromJson(response.data, CartDto.convertJson);
       cartController.sink.add(Cart("", [], -1));
     } on DioError catch (e) {
       cartController.sink.addError(e.response?.data["message"]);
+
       messageSink.add(e.response?.data["message"]);
     } catch (e) {
       messageSink.add(e.toString());
     }
     loadingSink.add(false);
   }
-
+  void  oldconform(CartConform event) {
+    loadingSink.add(true);
+    _cartRepository.oldconfirm(event.idCart).then((cartData) {
+      cartController.sink.add(Cart("", [], -1));
+    }).catchError((e) {
+      message.sink.add(e);
+    }).whenComplete(() => loadingSink.add(false));
+  }
   @override
   void dispose() {
     super.dispose();

@@ -15,11 +15,11 @@ class _SplashPageState extends State<SplashPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     Future.delayed(Duration(seconds: 2),() {
-      String token = AppCache.getString(VariableConstant.TOKEN);
+      String token = AppCache.getString(VariableConstant.token);
       if (token.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, VariableConstant.HOME_ROUTE);
+        Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
       } else {
-        Navigator.pushReplacementNamed(context, VariableConstant.SIGN_IN_ROUTE);
+        Navigator.pushReplacementNamed(context, VariableConstant.signInRoute);
       }
     });
   }

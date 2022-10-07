@@ -15,13 +15,13 @@ class ApiRequest {
   }
 
   Future signIn(String email, String password) {
-    return _dio.post(ApiConstant.SIGN_IN_URL,
+    return _dio.post(ApiConstant.signInUrl,
         data: {"email": email, "password": password});
   }
 
   Future signUp(String email, String name, String phone, String password,
       String address) {
-    return _dio.post(ApiConstant.SIGN_UP_URL, data: {
+    return _dio.post(ApiConstant.signUpUrl, data: {
       "email": email,
       "password": password,
       "phone": phone,
@@ -31,11 +31,11 @@ class ApiRequest {
   }
 
   Future getProducts() {
-    return _dio.get(ApiConstant.LIST_PRODUCT_URL);
+    return _dio.get(ApiConstant.listProductUrl);
   }
 
   Future getCart() {
-    return _dio.get(ApiConstant.CART_URL);
+    return _dio.get(ApiConstant.cartUrl);
   }
 
   Future getOrder() {
@@ -56,7 +56,7 @@ class ApiRequest {
 
   }
 
-  Future  confirmCard (String idCart) {
+  Future confirmCard (String idCart ) {
   return  _dio.post(ApiConstant.CART_CONFORM_URL,
         data: {"id_cart": idCart, "status": false});
 

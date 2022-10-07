@@ -119,7 +119,7 @@ class _SignInContainerState extends State<SignInContainer> {
             ProgressListenerWidget<SignInBloc>(
               callback: (event) {
                 if (event is SignInSuccessEvent) {
-                  Navigator.pushReplacementNamed(context, VariableConstant.HOME_ROUTE);
+                  Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
                 }
               },
@@ -146,7 +146,7 @@ class _SignInContainerState extends State<SignInContainer> {
             InkWell(
               onTap: () async{
                 try {
-                  var data = await Navigator.pushNamed(context, VariableConstant.SIGN_UP_ROUTE) as Map;
+                  var data = await Navigator.pushNamed(context, VariableConstant.signUpRoute) as Map;
                   setState(() {
                     emailController.text = data["email"];
                     passwordController.text = data["password"];

@@ -1,9 +1,13 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/order/order_page.dart';
+import 'package:flutter_order_food_nvchung/presentation/features/plugin/slider_image_product.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/sign_in/sign_in_page.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/sign_up/sign_up_page.dart';
 import 'common/constants/variable_constant.dart';
 import 'data/datasources/local/cache/app_cache.dart';
+import 'data/model/product.dart';
 import 'presentation/features/cart/cart_page.dart';
 import 'presentation/features/home/home_page.dart';
 import 'presentation/features/splash/splash_page.dart';
@@ -15,6 +19,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
@@ -28,14 +33,15 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       routes: {
-        VariableConstant.SIGN_IN_ROUTE: (context) => SignInPage(),
-        VariableConstant.SIGN_UP_ROUTE: (context) => SignUpPage(),
-        VariableConstant.HOME_ROUTE: (context) => HomePage(),
-        VariableConstant.SPLASH_ROUTE: (context) => SplashPage(),
-        VariableConstant.CART_ROUTE: (context) =>CartPage(),
-        VariableConstant.ORDER_ROUTE: (context) =>OrderPage(),
+        VariableConstant.signInRoute: (context) => SignInPage(),
+        VariableConstant.signUpRoute: (context) => SignUpPage(),
+        VariableConstant.homeRoute: (context) => HomePage(),
+        VariableConstant.splashRoute: (context) => SplashPage(),
+        VariableConstant.cartRoute: (context) =>CartPage(),
+        VariableConstant.orderRoute: (context) =>OrderPage(),
+        // VariableConstant.detail_ROUTE: (context) =>bu,
       },
-      initialRoute: VariableConstant.SPLASH_ROUTE,
+      initialRoute: VariableConstant.homeRoute,
     );
   }
 }
