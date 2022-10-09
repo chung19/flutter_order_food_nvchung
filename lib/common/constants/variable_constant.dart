@@ -9,6 +9,7 @@ class VariableConstant {
   static const String splashRoute = "/splash";
   static const String cartRoute = "/cart";
   static const String orderRoute = "/order";
+  static const String introRoute = "/intro";
 
 
 }

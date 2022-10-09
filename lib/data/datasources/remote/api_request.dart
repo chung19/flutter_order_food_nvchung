@@ -3,9 +3,8 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 
 import '../../../common/constants/api_constant.dart';
-import 'app_response.dart';
 import 'dio_client.dart';
-import 'dto/cart_dto.dart';
+
 
 class ApiRequest {
   late Dio _dio;
@@ -39,16 +38,16 @@ class ApiRequest {
   }
 
   Future getOrder() {
-    return _dio.get(ApiConstant.ORDER_HISTORY_URL);
+    return _dio.get(ApiConstant.orderHistoryCart);
   }
 
   Future addCart(String idProduct) {
-    return _dio.post(ApiConstant.ADD_CART_URL, data: {"id_product": idProduct});
+    return _dio.post(ApiConstant.addCartUrl, data: {"id_product": idProduct});
   }
 
   Future updateCart(String idCart, int quantity, String idProduct) {
 
-   return _dio.post(ApiConstant.CART_UPDATE_URL, data: {
+   return _dio.post(ApiConstant.updateCartUrl, data: {
       "id_product": idProduct,
       "id_cart": idCart,
       "quantity": quantity
@@ -57,7 +56,7 @@ class ApiRequest {
   }
 
   Future confirmCard (String idCart ) {
-  return  _dio.post(ApiConstant.CART_CONFORM_URL,
+  return  _dio.post(ApiConstant.conformCartUrl,
         data: {"id_cart": idCart, "status": false});
 
   }

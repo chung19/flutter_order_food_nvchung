@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_order_food_nvchung/data/datasources/local/cache/app_cache.dart';
+import 'package:is_first_run/is_first_run.dart';
 import 'package:lottie/lottie.dart';
-
 import '../../../common/constants/variable_constant.dart';
 class SplashPage extends StatefulWidget {
+  const SplashPage({Key? key}) : super(key: key);
+
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -12,16 +14,24 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
 
   @override
-  void didChangeDependencies() {
+  Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
-    Future.delayed(Duration(seconds: 2),() {
-      String token = AppCache.getString(VariableConstant.token);
-      if (token.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
-      } else {
-        Navigator.pushReplacementNamed(context, VariableConstant.signInRoute);
-      }
+    bool firstRun = await IsFirstRun.isFirstRun();
+    if(firstRun==true) {
+      Navigator.pushReplacementNamed(context, VariableConstant.introRoute);
+    }
+    else if(firstRun==false){
+    Future.delayed (Duration (seconds: 2)
+    , () {
+    String token = AppCache.getString(VariableConstant.token);
+    if (token.isNotEmpty) {
+    Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
+    } else {
+    Navigator.pushReplacementNamed(context, VariableConstant.signInRoute);
+    }
     });
+  }
+
   }
 
   @override

@@ -6,10 +6,10 @@ class ApiConstant {
   static const String signUpUrl = "/user/sign-up";
   static const String listProductUrl = "/product";
   static const String cartUrl = "cart";
-  static const String ADD_CART_URL = "cart/add";
-  static const String CART_UPDATE_URL = "cart/update";
-  static const String CART_CONFORM_URL = "cart/conform";
-  static const String ORDER_HISTORY_URL = "order/history";
+  static const String addCartUrl = "cart/add";
+  static const String updateCartUrl = "cart/update";
+  static const String conformCartUrl = "cart/conform";
+  static const String orderHistoryCart = "order/history";
 }
 // class ApiConstant {
 //   static const String baseUrl = "https://serverappsale.herokuapp.com/";
