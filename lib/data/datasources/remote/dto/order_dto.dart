@@ -4,12 +4,14 @@ class OrderDto {
   OrderDto({
     String? id,
     List<ProductDto>? products,
+    String? img ,
     int? price,
     bool? status,
     String? date_created,
   }) {
     _id = id;
     _products = products;
+    _img= img;
     _price = price;
     _status = status;
     _date_created = date_created;
@@ -25,13 +27,17 @@ class OrderDto {
     } else {
       _products = [];
     }
+
+    _img = json['img'];
     _price = json['price'];
+
     _status = json['status'];
     _date_created = json['date_created'];
   }
 
   String? _id;
   List<ProductDto>? _products;
+  String?  _img;
   int? _price;
   bool? _status;
   String? _date_created;
@@ -40,6 +46,7 @@ class OrderDto {
 
   List<ProductDto>? get products => _products;
 
+  String?  get img => _img;
   int? get price => _price;
 
   bool? get status => _status;
@@ -52,6 +59,7 @@ class OrderDto {
     if (_products != null) {
       map['products'] = _products?.map((v) => v.toJson()).toList();
     }
+    map['img'] = _img;
     map['price'] = _price;
     map['status'] = _status;
     map['date_created'] = _date_created;
@@ -64,3 +72,5 @@ class OrderDto {
     return data;
   }
 }
+
+

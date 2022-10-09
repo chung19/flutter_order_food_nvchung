@@ -13,9 +13,13 @@ class OrderRepository extends BaseRepository {
   OrderRepository() {
     _dio = DioClient.instance.dio;
   }
+
+  Future getOrder() {
+    return apiRequest.getOrder();
+  }
   Future<List<OrderDto>> fetchOrderHistory() {
     Completer<List<OrderDto>> completer = Completer();
-    _dio.post(ApiConstant.ORDER_HISTORY_URL).then((response){
+    _dio.post(ApiConstant.orderHistoryCart).then((response){
       AppResponse<List<OrderDto>> dataResponse = AppResponse.fromJson(response.data, OrderDto.convertJson);
       completer.complete(dataResponse.data);
     }).catchError((error) {

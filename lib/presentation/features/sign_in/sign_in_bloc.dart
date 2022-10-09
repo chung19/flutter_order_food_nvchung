@@ -36,7 +36,7 @@ class SignInBloc extends BaseBloc {
           AppResponse.fromJson(response.data, UserDto.fromJson);
       UserDto? userDto = userResponse.data;
       if (userDto != null) {
-        AppCache.setString(key: VariableConstant.TOKEN, value: userDto.token ?? "");
+        AppCache.setString(key: VariableConstant.token, value: userDto.token ?? "");
         progressSink.add(SignInSuccessEvent(message: "Đăng nhập thành công"));
       }
     } on DioError catch (e) {

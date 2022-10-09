@@ -5,7 +5,7 @@ import '../local/cache/app_cache.dart';
 class DioClient {
   Dio? _dio;
   static final BaseOptions _options = BaseOptions(
-    baseUrl: ApiConstant.BASE_URL,
+    baseUrl: ApiConstant.baseUrl,
     connectTimeout: 30000,
     receiveTimeout: 30000,
   );
@@ -17,7 +17,7 @@ class DioClient {
       _dio = Dio(_options);
       _dio?.interceptors.add(LogInterceptor(requestBody: true));
       _dio?.interceptors.add(InterceptorsWrapper(onRequest: (options, handler){
-        String token = AppCache.getString(VariableConstant.TOKEN);
+        String token = AppCache.getString(VariableConstant.token);
         if (token.isNotEmpty) {
           options.headers["Authorization"] = "Bearer $token";
         }

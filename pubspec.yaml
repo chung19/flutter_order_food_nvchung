@@ -44,7 +44,10 @@ dependencies:
   intl: ^0.17.0
   badges: ^2.0.3
   carousel_slider: ^4.1.1
-
+  dependencies:
+  getwidget: ^3.0.1
+  introduction_screen: ^1.0.7
+  is_first_run: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -71,6 +74,16 @@ flutter:
   assets:
     - assets/images/
     - assets/animations/animation_splash.json
+    - assets/images/empty_cart.png
+    - assets/images/opps.png
+    - assets/images/intro_food1.jpg
+    - assets/images/intro_food2.jpg
+    - assets/images/intro_food3.jpg
+    - assets/images/intro_food4.jpg
+
+  
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

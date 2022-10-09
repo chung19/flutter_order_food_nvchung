@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../common/bases/base_widget.dart';
 import '../../../common/constants/api_constant.dart';
+import '../../../common/constants/variable_constant.dart';
+import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
+import '../../../common/widgets/progress_listener_widget.dart';
 import '../../../data/datasources/remote/api_request.dart';
 import '../../../data/model/cart.dart';
 import '../../../data/model/product.dart';
@@ -28,16 +32,16 @@ class CartPage extends StatelessWidget {
         ),
         ProxyProvider<CartRepository, CartBloc>(
           update: (context, repository, bloc) {
-            bloc?.updateRepository( cartRepository: repository);
+            bloc?.updateRepository(cartRepository: repository);
             return bloc ?? CartBloc()
-              ..updateRepository( cartRepository: repository);
+              ..updateRepository(cartRepository: repository);
           },
         ),
       ],
       appBar: AppBar(
         title: const Center(child: Text("Cart")),
       ),
-      child: CartContainer(),
+      child: const CartContainer(),
     );
   }
 }
@@ -59,12 +63,17 @@ class _CartContainerState extends State<CartContainer> {
     _bloc = context.read();
     _bloc.eventSink.add(FetchCartEvent());
 
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _bloc.messageStream.listen((event) {
+        showMessage(context, "Thông báo", event);
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
+      onWillPop: () async {
         Navigator.pop(context, _cart);
         return true;
       },
@@ -84,14 +93,32 @@ class _CartContainerState extends State<CartContainer> {
               if (snapshot.hasData) {
                 _cart = snapshot.data;
                 if (snapshot.data == null || snapshot.data!.products!.isEmpty) {
-                  return const Text("Data empty");
+                  return Stack(
+                    children: [
+                      Image.asset(
+                        "assets/images/empty_cart.png",
+                      ),
+                      const Center(
+                        child: Text(
+                          'Cart Empty !',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF91FF52),
+                          ),
+                        ),
+                      ),
+
+                    ],
+                  );
                 }
                 return Column(
                   children: [
                     Expanded(
                       child: ListView.builder(
                           itemCount: snapshot.data?.products?.length,
-                          itemBuilder: (lstContext, index) => _buildItem(snapshot.data?.products?[index])),
+                          itemBuilder: (lstContext, index) =>
+                              _buildItem(snapshot.data?.products?[index])),
                     ),
                     Container(
                         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -100,25 +127,39 @@ class _CartContainerState extends State<CartContainer> {
                             color: Colors.teal,
                             borderRadius: BorderRadius.all(Radius.circular(5))),
                         child: Text(
-                            "Tổng tiền : ${NumberFormat("#,###", "en_US")
-                                    .format(_cart?.price)} đ",
-                            style: const TextStyle(fontSize: 25, color: Colors.white))),
+                            "Tổng tiền : ${NumberFormat("#,###", "en_US").format(_cart?.price)} đ",
+                            style: const TextStyle(
+                                fontSize: 25, color: Colors.white))),
                     Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        padding: const EdgeInsets.all(10),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            if (_cart != null) {
-                              String idCart = _cart!.id ??= "";
-                              _bloc.eventSink.add(CartConform(idCart: idCart));
-                            }
-                          },
-                          style: ButtonStyle(
-                              backgroundColor:
-                              MaterialStateProperty.all(Colors.deepOrange)),
-                          child: const Text("Confirm",
-                              style: TextStyle(color: Colors.white, fontSize: 25)),
-                        )),
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.all(10),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_cart != null) {
+                            String idCart = _cart!.id ??= "";
+                            _bloc.eventSink.add(CartConform(
+                              idCart: idCart,
+                            ));
+                          }
+                        },
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.deepOrange)),
+                        child: const Text("Confirm",
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 25)),
+                      ),
+                    ),
+                    ProgressListenerWidget<CartBloc>(
+                      callback: (event) {
+                        if (event is CartConFormSuccessEvent) {
+                          Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
+                        }
+                      },
+                      child: Container(),
+                    ),
+
                   ],
                 );
               }
@@ -146,7 +187,7 @@ class _CartContainerState extends State<CartContainer> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: Image.network(
-                      ApiConstant.BASE_URL + (product?.img).toString(),
+                      ApiConstant.baseUrl + (product?.img).toString(),
                       width: 150,
                       height: 120,
                       fit: BoxFit.fill),
@@ -176,10 +217,13 @@ class _CartContainerState extends State<CartContainer> {
                         children: [
                           ElevatedButton(
                             onPressed: () {
-                              if (product != null && _cart != null ) {
+                              if (product != null && _cart != null) {
                                 String? cartId = _cart?.id;
                                 if (cartId?.isNotEmpty == true) {
-                                  _bloc.eventSink.add(UpdateCartEvent(idCart: cartId!, idProduct: product.id, quantity: product.quantity - 1 as int));
+                                  _bloc.eventSink.add(UpdateCartEvent(
+                                      idCart: cartId!,
+                                      idProduct: product.id,
+                                      quantity: product.quantity - 1 as int));
                                 }
                               }
                             },
@@ -192,10 +236,13 @@ class _CartContainerState extends State<CartContainer> {
                           ),
                           ElevatedButton(
                             onPressed: () {
-                              if (product != null && _cart != null ) {
+                              if (product != null && _cart != null) {
                                 String cartId = _cart!.id ??= "";
                                 if (cartId.isNotEmpty) {
-                                  _bloc.eventSink.add(UpdateCartEvent(idCart: cartId, idProduct: product.id, quantity: product.quantity + 1 as int));
+                                  _bloc.eventSink.add(UpdateCartEvent(
+                                      idCart: cartId,
+                                      idProduct: product.id,
+                                      quantity: product.quantity + 1 as int));
                                 }
                               }
                             },

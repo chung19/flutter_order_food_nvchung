@@ -30,3 +30,13 @@ class CartConform extends BaseEvent {
   @override
   List<Object?> get props => [];
 }
+
+class CartConFormSuccessEvent extends BaseEvent {
+String message;
+  CartConFormSuccessEvent({
+   required this.message,
+  });
+
+  @override
+  List<Object?> get props => [];
+}
