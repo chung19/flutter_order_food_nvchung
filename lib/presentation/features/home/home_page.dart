@@ -402,7 +402,8 @@ class _HomeContainerState extends State<HomeContainer> {
 
             child: Flex(
               direction: Axis.horizontal,
-              children:[ Expanded(
+              children:[
+                Expanded(
                 child: SizedBox(
                   // width: MediaQuery.of(context).size.width,
                    height: MediaQuery.of(context).size.height,

@@ -1,4 +1,4 @@
-// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:flutter_order_food_nvchung/common/plugin/Intro.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/order/order_page.dart';
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         VariableConstant.orderRoute: (context) =>OrderPage(),
        VariableConstant.introRoute: (context) =>Intro(),
       },
-      initialRoute: VariableConstant.introRoute,
+      initialRoute: VariableConstant.splashRoute  ,
     );
   }
 }

@@ -12,7 +12,7 @@ class _IntroState extends State<Intro> {
   List<PageViewModel> getPages() {
     return [
       PageViewModel(
-          image: Image.asset("assets/images/intro_food1.jpg"),
+          image: Image.asset("assets/images/intro_food1.jpg",width: double.infinity,fit: BoxFit.fill,),
           title: "Welcome to Food Paradise",
           body: ("Here we provide delicious dishes from fresh foods "),
           decoration: const PageDecoration(
@@ -22,7 +22,7 @@ class _IntroState extends State<Intro> {
                 0xFF154FD3),),
           )),
       PageViewModel(
-        image: Image.asset("assets/images/intro_food2.jpg"),
+        image: Image.asset("assets/images/intro_food2.jpg",width: double.infinity,fit: BoxFit.fill,),
         title: "Cheap tasty tonic ",
         body: "As our store selection criteria",
         footer: const Text(
@@ -41,7 +41,7 @@ class _IntroState extends State<Intro> {
         ),
       ),
       PageViewModel(
-        image: Image.asset("assets/images/intro_food3.jpg"),
+        image: Image.asset("assets/images/intro_food3.jpg",width: double.infinity,fit: BoxFit.fill,),
         title: "Fast",
         body: "Convenience",
         footer: const Text(
@@ -60,7 +60,7 @@ class _IntroState extends State<Intro> {
         ),
       ),
       PageViewModel(
-          image: Image.asset("assets/images/intro_food4.jpg"),
+          image: Image.asset("assets/images/intro_food4.jpg",width: double.infinity,fit: BoxFit.fill,),
           title: "Happy Food ",
           body: "Touch is suck",
           footer:  const Text(
@@ -84,9 +84,7 @@ class _IntroState extends State<Intro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Introduction Screen"),
-      ),
+
       body: IntroductionScreen(
         globalBackgroundColor: Colors.white,
         pages: getPages(),
@@ -95,7 +93,12 @@ class _IntroState extends State<Intro> {
         skip: const Text("Skip"),
         done: TextButton(
             onPressed: () {
-              Navigator.pushReplacementNamed(context, VariableConstant.splashRoute);
+              setState(() {
+
+                Navigator.pushReplacementNamed(context, VariableConstant.signInRoute);
+
+
+              });
             },
             child: const Text("Got it ")),
         onDone: () {},
