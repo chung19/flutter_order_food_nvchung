@@ -22,7 +22,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
-        title: const Text("Sign In"),
+        title: Center(child: const Text("Sign In")),
       ),
       providers: [
         Provider(create: (context) => ApiRequest()),
