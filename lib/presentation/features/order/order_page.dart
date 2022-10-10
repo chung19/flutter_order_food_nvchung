@@ -26,7 +26,7 @@ class OrderPage extends StatelessWidget {
         )
       ],
       appBar: AppBar(
-        title: const Text("Order History"),
+        title: Center(child: const Text("Order History")),
       ),
       child: const OrderContainer(),
     );
