@@ -45,9 +45,10 @@ dependencies:
   badges: ^2.0.3
   carousel_slider: ^4.1.1
   dependencies:
-  getwidget: ^3.0.1
   introduction_screen: ^1.0.7
   is_first_run: ^1.0.0
+  flutter_screenutil: ^5.5.4
+  google_fonts: ^3.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -80,6 +81,12 @@ flutter:
     - assets/images/intro_food2.jpg
     - assets/images/intro_food3.jpg
     - assets/images/intro_food4.jpg
+    - assets/images/bg.png
+    - assets/images/cook.png
+    - assets/images/delivery.png
+    - assets/images/FooD.jpg
+    - assets/images/offer.png
+    - assets/animations/33591-cooker.json
 
   
 

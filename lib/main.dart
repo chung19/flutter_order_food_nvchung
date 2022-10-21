@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "QuickSan",
         primarySwatch: Colors.blue,
       ),
+
       routes: {
         VariableConstant.signInRoute: (context) => SignInPage(),
         VariableConstant.signUpRoute: (context) => SignUpPage(),
