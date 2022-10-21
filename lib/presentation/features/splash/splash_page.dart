@@ -15,7 +15,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Future<void> didChangeDependencies() async {
     bool firstRun = await IsFirstRun.isFirstRun();
-    Future.delayed ( Duration (seconds: 2 )
+    Future.delayed ( Duration (seconds: 3 )
     , () {
 
     String token = AppCache.getString(VariableConstant.token);
@@ -35,8 +35,8 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return  Container(
-          color: Colors.blueGrey,
-          width: MediaQuery.of(context).size.width,
+      color: Color(0xFF50baff),
+      width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
             child: Column(
@@ -44,8 +44,8 @@ class _SplashPageState extends State<SplashPage> {
                // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(top: 0),
-                  child: Lottie.asset('assets/animations/animation_splash.json',
+                  margin: const EdgeInsets.only(top: 150),
+                  child: Lottie.asset('assets/animations/33591-cooker.json',
                       animate: true, repeat: true),
                 ),
                 Column(

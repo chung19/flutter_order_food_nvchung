@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_order_food_nvchung/data/model/order.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/order/order_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../common/bases/base_widget.dart';
@@ -194,7 +195,7 @@ class _OrderContainerState extends State<OrderContainer> {
   }
   Widget _buildOrderDetail(Order? orderModel, BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF3ac5c9),
+      // backgroundColor: const Color(0xFF3ac5c9),
       appBar: AppBar(
           backgroundColor: const Color(0xFFf85c34),
         title: const Center(child: Text('Order Detail')),
@@ -229,44 +230,62 @@ class _OrderContainerState extends State<OrderContainer> {
                             child: Text((orderModel?.products?[0].name).toString(),
                                 maxLines: 5,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 24,
-                                color: Color(0xFF2D9686),
-                              ),),
+                              style: GoogleFonts.chewy(
+                                fontSize: 24,
+                                color: const Color(0xFFA22617),
+                                textStyle:
+                                Theme.of(context).textTheme.displayLarge,
+                              ),
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 5),
                             child: Text((orderModel?.products?[0].address).toString(),
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 22,
-                                color: Color(0xFF385B28),
-                              ),),
+                              style: GoogleFonts.alike(
+                                fontSize: 20,
+                                textStyle:
+                                Theme.of(context).textTheme.displaySmall,
+                              ),
+                            ),
                           ),
                           Container(
                             margin: const EdgeInsets.symmetric(vertical:5, ),
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.fromLTRB(80, 10, 80, 10),
                             decoration: const BoxDecoration(
-                              color: Color(0xFF19E0E0),),
+                              color: Color(0xFF19E0E0), borderRadius:
+                            BorderRadius.all(Radius.circular(30),),),
                             child: Text(
-                                "Giá : " +
-                                    NumberFormat("#,###", "en_US")
-                                        .format(orderModel?.price) +
-                                    " đ",
-                                style: const TextStyle(fontSize: 21,
-                                color: Color(0xFFEE072F),
-                              ),),
+                                "Giá : ${NumberFormat("#,###", "en_US")
+                                        .format(orderModel?.price)} đ",
+                              style: GoogleFonts.amita(
+                                fontSize: 20,
+                                color: const Color(0xFFEFF5EF),
+                                textStyle:
+                                Theme.of(context).textTheme.displaySmall,
+                              ),
+                            ),
                           ),
                           Container(
                             margin: const EdgeInsets.symmetric(vertical:5, ),
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.fromLTRB(95, 10, 95, 10),
                             decoration: const BoxDecoration(
-                              color: Color(0xFF969F9F),),
+                              color: Color(0xFFC91A1A),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(30),),),
+
+
                             child: Text(("Số Lượng: ${orderModel?.products?[0].quantity}").toString(),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 20,
-                                color: Color(0xFFFFE002),
-                              ),),
+                              style: GoogleFonts.amita(
+                                fontSize: 20,
+                                color: const Color(0xFFEFF5EF),
+                                textStyle:
+                                Theme.of(context).textTheme.displaySmall,
+                              ),
+                            ),
                           ),
 
                         ],

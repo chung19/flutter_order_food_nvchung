@@ -1,4 +1,5 @@
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
 import '../constants/variable_constant.dart';
@@ -12,70 +13,113 @@ class _IntroState extends State<Intro> {
   List<PageViewModel> getPages() {
     return [
       PageViewModel(
-          image: Image.asset("assets/images/intro_food1.jpg",width: double.infinity,fit: BoxFit.fill,),
-          title: "Welcome to Food Paradise",
+          image: Image.asset("assets/images/FooD.jpg",width: double.infinity,fit: BoxFit.fill,),
+          title: "Welcome to Food Paradise" ,
           body: ("Here we provide delicious dishes from fresh foods "),
-          decoration: const PageDecoration(
-            pageColor: Colors.blue,
-            titleTextStyle: TextStyle(color: Color(0xFF56D084),fontWeight: FontWeight.w700, fontSize: 24.0),
-            bodyTextStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0,color: Color(
-                0xFF154FD3),),
+          decoration:  PageDecoration(
+            pageColor: Colors.white,
+            titleTextStyle:   GoogleFonts.chewy(
+            fontSize: 24,
+            color: const Color(0xFFD54034),
+            textStyle:
+            Theme.of(context).textTheme.displayLarge,
+          ),
+            bodyTextStyle:   GoogleFonts.chewy(
+            fontSize: 24,
+            color: const Color(0xFF882820),
+            textStyle:
+            Theme.of(context).textTheme.displayLarge,
+          ),
           )),
       PageViewModel(
-        image: Image.asset("assets/images/intro_food2.jpg",width: double.infinity,fit: BoxFit.fill,),
+        image: Image.asset("assets/images/offer.png",width: double.infinity,fit: BoxFit.fill,),
         title: "Cheap tasty tonic ",
         body: "As our store selection criteria",
-        footer: const Text(
+        footer:  Text(
           'Let is Experience Together',
-          style: TextStyle(
+          style: GoogleFonts.chewy(
             fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF56221E),
+            color: const Color(0xFF56221E),
+            textStyle:
+            Theme.of(context).textTheme.displaySmall,
           ),
         ),
-        decoration: const PageDecoration(
-          pageColor: Colors.limeAccent,
-          titleTextStyle: TextStyle(color: Color(0xFF2052D2),fontWeight: FontWeight.w700, fontSize: 24.0),
-          bodyTextStyle: TextStyle(color: Color(0xFF56D084),fontWeight: FontWeight.w700, fontSize: 20.0),
+        decoration:  PageDecoration(
+          pageColor: Colors.white10,
+          titleTextStyle:   GoogleFonts.alice(
+    fontSize: 24,
+    color: const Color(0xffc91a1a),
+    textStyle:
+
+    Theme.of(context).textTheme.displaySmall,
+    ),
+          bodyTextStyle:   GoogleFonts.chewy(
+    fontSize: 20,
+    color: const Color(0xFF56221E),
+    textStyle:
+    Theme.of(context).textTheme.displaySmall,
+    ),
 
         ),
       ),
       PageViewModel(
-        image: Image.asset("assets/images/intro_food3.jpg",width: double.infinity,fit: BoxFit.fill,),
+        image: Image.asset("assets/images/delivery.png",width: double.infinity,fit: BoxFit.fill,),
         title: "Fast",
         body: "Convenience",
-        footer: const Text(
+        footer:  Text(
           'Easy 1-touch payment ',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFFE7CD1A),
-          ),
+          style: GoogleFonts.chewy(
+    fontSize: 20,
+    color: const Color(0xFF56221E),
+    textStyle:
+    Theme.of(context).textTheme.displaySmall,
+    ),
         ),
-        decoration: const PageDecoration(
-          pageColor: Colors.pink,
-          titleTextStyle: TextStyle(color: Color(0xFF56D084),fontWeight: FontWeight.w700, fontSize: 24.0),
-          bodyTextStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0,color: Color(
-              0xFF154FD3),),
+        decoration:  PageDecoration(
+          pageColor: Colors.white,
+          titleTextStyle:   GoogleFonts.alice(
+            fontSize: 24,
+            color: const Color(0xffc91a1a),
+            textStyle:
+
+            Theme.of(context).textTheme.displaySmall,
+          ),
+          bodyTextStyle:   GoogleFonts.chewy(
+    fontSize: 20,
+    color: const Color(0xFF56221E),
+    textStyle:
+    Theme.of(context).textTheme.displaySmall,
+    ),
         ),
       ),
       PageViewModel(
-          image: Image.asset("assets/images/intro_food4.jpg",width: double.infinity,fit: BoxFit.fill,),
+          image: Image.asset("assets/images/cook.png",width: double.infinity,fit: BoxFit.fill,),
           title: "Happy Food ",
           body: "Touch is suck",
-          footer:  const Text(
+          footer:  Text(
           'Eat now',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF60CB49),
-          ),
+            style: GoogleFonts.chewy(
+              fontSize: 20,
+              color: const Color(0xFF56221E),
+              textStyle:
+              Theme.of(context).textTheme.displaySmall,
+            ),
         ),
-        decoration: const PageDecoration(
-          pageColor: Colors.teal,
-          titleTextStyle: TextStyle(color: Color(0xFFC91A1A),fontWeight: FontWeight.w700, fontSize: 24.0),
-          bodyTextStyle: TextStyle(fontWeight: FontWeight.w700, fontSize: 20.0,color: Color(
-              0xFF154FD3),),
+        decoration: PageDecoration(
+          pageColor: Colors.white,
+          titleTextStyle:   GoogleFonts.alice(
+            fontSize: 24,
+            color: const Color(0xffc91a1a),
+            textStyle:
+
+            Theme.of(context).textTheme.displaySmall,
+          ),
+          bodyTextStyle:  GoogleFonts.chewy(
+    fontSize: 20,
+    color: const Color(0xFF56221E),
+    textStyle:
+    Theme.of(context).textTheme.displaySmall,
+    ),
         ),
       ),
     ];
@@ -90,7 +134,35 @@ class _IntroState extends State<Intro> {
         pages: getPages(),
         showNextButton: true,
         showSkipButton: true,
-        skip: const Text("Skip"),
+        skip: Container(
+            margin: const EdgeInsets.symmetric(
+              vertical: 5,
+            ),
+            padding: const EdgeInsets.fromLTRB(23.8, 2, 23.8,2),
+            decoration: const BoxDecoration(
+                color: Color(0xFFC91A1A),
+                borderRadius:
+                BorderRadius.all(Radius.circular(30))),
+            child:  Text("Skip",style: GoogleFonts.atomicAge(
+              color: Color(0xFFF3F6F3),
+            ),
+            ),
+
+        ),
+        next: Container(
+          margin: const EdgeInsets.symmetric(
+            vertical: 5,
+          ),
+          padding: const EdgeInsets.fromLTRB(4, 2, 10,2),
+          decoration: const BoxDecoration(
+              color: Color(0xFF08EEB4),
+              borderRadius:
+              BorderRadius.all(Radius.circular(30))),
+
+          child: Text(" Next",style: GoogleFonts.atomicAge(
+          color: Color(0xFFFFFFFF),
+          ),),
+        ),
         done: TextButton(
             onPressed: () {
               setState(() {
@@ -100,7 +172,20 @@ class _IntroState extends State<Intro> {
 
               });
             },
-            child: const Text("Got it ")),
+            child:
+            Container(
+                margin: const EdgeInsets.symmetric(
+                  vertical: 5,
+                ),
+                padding: const EdgeInsets.fromLTRB(8, 2, 8,2),
+                decoration: const BoxDecoration(
+                    color: Color(0xFF1B7CCC),
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(30))),
+                child: Text("Got it ",style:GoogleFonts.atomicAge(
+                color: Color(0xFFF1F5F1),
+              ) ,),
+            ),),
         onDone: () {},
       ),
     );

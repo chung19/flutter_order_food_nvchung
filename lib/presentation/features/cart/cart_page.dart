@@ -133,21 +133,60 @@ class _CartContainerState extends State<CartContainer> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 10),
                       padding: const EdgeInsets.all(10),
-                      child: ElevatedButton(
+                      child:  ElevatedButton(
                         onPressed: () {
-                          if (_cart != null) {
-                            String idCart = _cart!.id ??= "";
-                            _bloc.eventSink.add(CartConform(
-                              idCart: idCart,
-                            ));
-                          }
+                          showDialog(
+                              context: context,
+                              builder: (_) {
+                                return AlertDialog(
+                                  title: Text(
+                                    "Đặt hàng?",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.red),
+                                  ),
+                                  content: Text(
+                                      "Quý khách sẽ thanh toán ${NumberFormat("#,###", "en_US").format(_cart?.price)} đồng cho các món ăn trên"),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(context),
+                                        child: Text(
+                                          "Hủy",
+                                          style: TextStyle(
+                                              color: Colors.grey[400],
+                                              fontSize: 16),
+                                        )),
+                                    TextButton(
+                                        onPressed: () {
+                                          if (_cart != null) {
+                                            String idCart = _cart!.id ??= "";
+                                            _bloc.eventSink.add(CartConform(
+                                              idCart: idCart,
+                                            ));
+                                             print('p');
+                                            Navigator.pop(context);
+                                          }
+                                        },
+                                        child: Text("Thanh toán",
+                                            style: TextStyle(
+                                                color: Colors.red[400],
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16))),
+                                  ],
+                                );
+                              });
                         },
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.deepOrange)),
-                        child: const Text("Confirm",
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 25)),
+                        child: Text(
+                          "Thanh toán",
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color.fromARGB(255, 255, 0, 0),
+                          minimumSize: const Size.fromHeight(50),
+                        ),
                       ),
                     ),
                     ProgressListenerWidget<CartBloc>(

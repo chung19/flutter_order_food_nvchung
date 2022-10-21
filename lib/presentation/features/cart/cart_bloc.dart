@@ -89,6 +89,7 @@ class CartBloc extends BaseBloc {
     try{
      (await  _cartRepository.confirmCart(event.idCart)) ;
      cartController.sink.add(Cart("", [], -1));
+
      progressSink.add(CartConFormSuccessEvent(
        message: "Đăng nhập thành công",
 

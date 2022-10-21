@@ -16,13 +16,12 @@ class SignInPage extends StatefulWidget {
   @override
   State<SignInPage> createState() => _SignInPageState();
 }
-
 class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
-        title: Center(child: const Text("Sign In")),
+        title: const Center(child: Text("Sign In")),
       ),
       providers: [
         Provider(create: (context) => ApiRequest()),
