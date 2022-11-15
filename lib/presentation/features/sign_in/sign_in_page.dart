@@ -21,6 +21,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1ebd60),
         title: const Center(child: Text("Sign In")),
       ),
       providers: [

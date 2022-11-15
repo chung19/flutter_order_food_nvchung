@@ -11,7 +11,8 @@ import 'presentation/features/home/home_page.dart';
 import 'presentation/features/splash/splash_page.dart';
 
 void main() {
-  runApp( MyApp());
+  runApp(MyApp());
+
 
   AppCache.init();
 }

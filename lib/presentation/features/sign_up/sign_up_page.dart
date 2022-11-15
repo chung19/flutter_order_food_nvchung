@@ -22,7 +22,8 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
-        title: Center(child: const Text("Sign Up")),
+        backgroundColor: const Color(0xFF1ebd60),
+        title: const Center(child: Text("Sign Up")),
       ),
       providers: [
         Provider(create: (context) => ApiRequest()),

@@ -30,20 +30,61 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Future<void> handleButtonSignOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.clear();
-    print('log out ');
-    // Navigator.pushNamed(context, "/sign_in");
-    Navigator.pushReplacementNamed(context, VariableConstant.signInRoute);
+    showDialog(
+        context: context,
+        builder: (_)
+    {
+      return AlertDialog(
+        actions: [
+          Row(
+
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.grey[400], fontSize: 16),
+                  )),
+              TextButton(
+                onPressed: () {
+                  preferences.clear();
+                  print('log out ');
+                  // Navigator.pushNamed(context, "/sign_in");
+
+                  Navigator.pushReplacementNamed(
+                      context, VariableConstant.signInRoute);
+                },
+                child: Container(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 5,
+                  ),
+                  padding: const EdgeInsets.fromLTRB(8, 10, 4, 10),
+                  decoration: const BoxDecoration(
+                      color: Color(0xFFF10808),
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(30))),
+                  child: Text(" Do You Want Quit Now ! ", style: GoogleFonts.antonio(
+                    color: const Color(0xFFF1F5F1),
+                  ),),
+                ),),
+            ],
+          ),
+        ],
+
+
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFf85c34),
+        backgroundColor: const Color(0xFF1ebd60),
         title: const Center(child: Text("Home")),
         leading: IconButton(
-          icon: const Icon(Icons.logout),
+          icon: Tab(icon: Image.asset("assets/images/boy.png",height:50,fit: BoxFit.fill,), ),iconSize: 2,
           onPressed: () {
             handleButtonSignOut();
           },
@@ -92,6 +133,7 @@ class _HomePageState extends State<HomePage> {
             },
           )
         ],
+
       ),
       providers: [
         Provider(create: (context) => ApiRequest()),
@@ -287,6 +329,7 @@ class _HomeContainerState extends State<HomeContainer> {
         child: SizedBox(
       child: Stack(
         children: [
+
           StreamBuilder<List<Product>>(
               initialData: const [],
               stream: _homeBloc.listProductController.stream,
@@ -330,6 +373,7 @@ class _HomeContainerState extends State<HomeContainer> {
                   );
                 }
                 return ListView.builder(
+
                     itemCount: snapshot.data?.length ?? 0,
                     itemBuilder: (context, index) {
                       // return _buildSlider(snapshot.data?[index], context);
@@ -357,6 +401,7 @@ class _HomeContainerState extends State<HomeContainer> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Image.network(

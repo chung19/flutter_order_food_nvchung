@@ -87,6 +87,12 @@ flutter:
     - assets/images/FooD.jpg
     - assets/images/offer.png
     - assets/animations/33591-cooker.json
+    - assets/images/boy.png
+    - assets/images/banner/banner1.jpg
+    - assets/images/banner/banner2.jpg
+    - assets/images/banner/banner3.jpg
+    - assets/images/banner/banner4.jpg
+    
 
   
 
