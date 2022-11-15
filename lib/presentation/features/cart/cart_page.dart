@@ -39,6 +39,7 @@ class CartPage extends StatelessWidget {
         ),
       ],
       appBar: AppBar(
+        backgroundColor: const Color(0xFF1ebd60),
         title: const Center(child: Text("Cart")),
       ),
       child: const CartContainer(),

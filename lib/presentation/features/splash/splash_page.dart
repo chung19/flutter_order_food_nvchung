@@ -14,8 +14,9 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
     bool firstRun = await IsFirstRun.isFirstRun();
-    Future.delayed ( Duration (seconds: 3 )
+    Future.delayed ( Duration (seconds: 2 )
     , () {
 
     String token = AppCache.getString(VariableConstant.token);
@@ -50,7 +51,7 @@ class _SplashPageState extends State<SplashPage> {
                 ),
                 Column(
                   children: const [
-                    Text("Welcome",
+                    Text("Foodo",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 50,
