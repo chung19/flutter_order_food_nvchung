@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../../common/bases/base_widget.dart';
@@ -214,7 +215,7 @@ class _CartContainerState extends State<CartContainer> {
 
   Widget _buildItem(Product? product) {
     return SizedBox(
-      height: 135,
+      height: 170,
       child: Card(
         elevation: 5,
         shadowColor: Colors.blueGrey,
@@ -229,7 +230,7 @@ class _CartContainerState extends State<CartContainer> {
                   child: Image.network(
                       ApiConstant.baseUrl + (product?.img).toString(),
                       width: 150,
-                      height: 120,
+                      height: 155,
                       fit: BoxFit.fill),
                 ),
               ),
@@ -248,13 +249,36 @@ class _CartContainerState extends State<CartContainer> {
                             style: const TextStyle(fontSize: 16)),
                       ),
                       Text(
-                          "Giá : " +
-                              NumberFormat("#,###", "en_US")
-                                  .format(product?.price) +
-                              " đ",
+                          "Giá : ${NumberFormat("#,###", "en_US")
+                                  .format(product?.price)} đ",
                           style: const TextStyle(fontSize: 12)),
+
+                      Center(
+                        child: ElevatedButton(
+
+                          onPressed: () {
+                            if (product != null && _cart != null) {
+                              String cartId = _cart!.id ??= "";
+                              if (cartId.isNotEmpty) {
+                                _bloc.eventSink.add(UpdateCartEvent(
+                                    idCart: cartId,
+                                    idProduct: product.id,
+                                    quantity: product.quantity - product.quantity  as int));
+                              }
+                            }
+                          }, style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white, // Background color
+                        ),
+
+                          child: const Icon(FontAwesomeIcons.trashCan,
+                            color: Colors.black54, //<-- SEE HERE
+                          ),
+                        ),
+                      ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+
                           ElevatedButton(
                             onPressed: () {
                               if (product != null && _cart != null) {
@@ -266,8 +290,12 @@ class _CartContainerState extends State<CartContainer> {
                                       quantity: product.quantity - 1 as int));
                                 }
                               }
-                            },
-                            child: const Text("-"),
+                            },style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white, // Background color
+                          ),
+                            child: const Icon(FontAwesomeIcons.minus,
+                              color: Colors.black54, //<-- SEE HERE
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -285,9 +313,13 @@ class _CartContainerState extends State<CartContainer> {
                                       quantity: product.quantity + 1 as int));
                                 }
                               }
-                            },
-                            child: const Text("+"),
+                            },style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white, // Background color
                           ),
+                           child: const Icon(FontAwesomeIcons.add,
+                            color: Colors.black54, //<-- SEE HERE
+                          ),
+                          )
                         ],
                       )
                     ],

@@ -8,6 +8,7 @@ import '../../../data/datasources/remote/app_response.dart';
 import '../../../data/datasources/remote/dto/user_dto.dart';
 import '../../../data/model/user.dart';
 import '../../../data/repositories/authentication_repository.dart';
+import '../sign_in/sign_in_event.dart';
 
 class SignUpBloc extends BaseBloc {
   StreamController<User> userData = StreamController();
@@ -51,6 +52,7 @@ class SignUpBloc extends BaseBloc {
       messageSink.add(e.response?.data["message"]);
     } catch (e) {
       messageSink.add(e.toString());
+      progressSink.add(SignInFailEvent(message: e.toString()));
     }
     loadingSink.add(false);
   }

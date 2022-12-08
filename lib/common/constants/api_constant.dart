@@ -1,5 +1,5 @@
 class ApiConstant {
-  static const String baseUrl = "https://serverappsale.herokuapp.com/";
+  static const String baseUrl = "https://serverappsale.onrender.com/";
 
   // End Point
   static const String signInUrl = "/user/sign-in";
@@ -12,7 +12,7 @@ class ApiConstant {
   static const String orderHistoryCart = "order/history";
 }
 // class ApiConstant {
-//   static const String baseUrl = "https://serverappsale.herokuapp.com/";
+//   static const String baseUrl = "https://serverappsale.onrender.com/";
 //
 //   // End Point
 //   static const String signInUrl = "/user/sign-in";
