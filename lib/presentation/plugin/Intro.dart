@@ -2,7 +2,9 @@
 import 'package:google_fonts/google_fonts.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
-import '../constants/variable_constant.dart';
+
+import '../../common/constants/variable_constant.dart';
+
 class Intro extends StatefulWidget {
   const Intro({Key? key}) : super(key: key);
   @override

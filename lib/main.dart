@@ -1,9 +1,10 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
-import 'package:flutter_order_food_nvchung/common/plugin/Intro.dart';
+
 import 'package:flutter_order_food_nvchung/presentation/features/order/order_page.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/sign_in/sign_in_page.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/sign_up/sign_up_page.dart';
+import 'package:flutter_order_food_nvchung/presentation/plugin/Intro.dart';
 import 'common/constants/variable_constant.dart';
 import 'data/datasources/local/cache/app_cache.dart';
 import 'presentation/features/cart/cart_page.dart';

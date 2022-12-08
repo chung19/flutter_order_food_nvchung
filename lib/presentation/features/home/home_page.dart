@@ -19,6 +19,7 @@ import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../data/datasources/remote/api_request.dart';
 import '../../../data/model/cart.dart';
+import '../../plugin/slider_banner.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -329,62 +330,72 @@ class _HomeContainerState extends State<HomeContainer> {
         child: SizedBox(
       child: Stack(
         children: [
+          ListView(
+              children: [
+                         SliderBanner(),
+                StreamBuilder<List<Product>>(
+                    initialData: const [],
+                    stream: _homeBloc.listProductController.stream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Stack(
+                          children: [
+                            Image.asset(
+                              "assets/images/opps.png",
+                            ),
+                            const Center(
+                              child: Text(
+                                'Product is Err!',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF91FF52),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      if (snapshot.hasData && snapshot.data == []) {
+                        return Column(
+                          children: [
+                            Image.asset(
+                              "assets/images/empty_cart.png",
+                            ),
+                            const Center(
+                              child: Text(
+                                'Product Empty!',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF91FF52),
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      return ListView.builder(
+                          // scrollDirection: Axis.vertical,
+                      // scrollDirection: Axis.horizontal,
+                      //     shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                          itemCount: snapshot.data?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            // return _buildSlider(snapshot.data?[index], context);
+                            return _buildItemFood(snapshot.data?[index]);
+                          });
+                    }),
 
-          StreamBuilder<List<Product>>(
-              initialData: const [],
-              stream: _homeBloc.listProductController.stream,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Stack(
-                    children: [
-                      Image.asset(
-                        "assets/images/opps.png",
-                      ),
-                      const Center(
-                        child: Text(
-                          'Product is Err!',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF91FF52),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                }
-                if (snapshot.hasData && snapshot.data == []) {
-                  return Stack(
-                    children: [
-                      Image.asset(
-                        "assets/images/empty_cart.png",
-                      ),
-                      const Center(
-                        child: Text(
-                          'Product Empty!',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF91FF52),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                }
-                return ListView.builder(
-
-                    itemCount: snapshot.data?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      // return _buildSlider(snapshot.data?[index], context);
-                      return _buildItemFood(snapshot.data?[index]);
-                    });
-              }),
+              ]),
           LoadingWidget(
             bloc: _homeBloc,
             child: Container(),
           )
         ],
+
       ),
     ));
   }
@@ -492,180 +503,5 @@ class _HomeContainerState extends State<HomeContainer> {
     );
   }
 
-  Widget _buildSlider(
-    Product? product,
-    BuildContext context,
-  ) {
-    // double height = MediaQuery.of(context).size.height;
-    //  double width = MediaQuery.of(context).size.width;
 
-    final random = Random();
-    if (product == null) return Container();
-
-    return Scaffold(
-      // backgroundColor: const Color(0xFF3ac5c9),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFf85c34),
-        title: const Center(child: Text('Home Detail')),
-      ),
-
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Flex(direction: Axis.horizontal, children: [
-            Expanded(
-              child: SizedBox(
-                // width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  // mainAxisAlignment: MainAxisAlignment.center,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Flexible(
-                            child: FractionallySizedBox(
-                              heightFactor: 0.03,
-                            ),
-                          ),
-                          Image.network(
-                              ApiConstant.baseUrl + (product?.img).toString(),
-                              width: double.infinity,
-                              height: 100,
-                              fit: BoxFit.fill),
-                          const Flexible(
-                            child: FractionallySizedBox(
-                              heightFactor: 0.09,
-                            ),
-                          ),
-                          Text(
-                            product.name.toString(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.chewy(
-                              fontSize: 24,
-                              color: Color(0xFFA22617),
-                              textStyle:
-                                  Theme.of(context).textTheme.displayLarge,
-                            ),
-                          ),
-                          const Flexible(
-                            child: FractionallySizedBox(
-                              heightFactor: 0.39,
-                            ),
-                          ),
-                          CarouselSlider.builder(
-                            itemCount:
-                                product.gallery[random.nextInt(3)].length,
-                            itemBuilder: (BuildContext context, int itemIndex,
-                                    int pageViewIndex) =>
-                                ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                ApiConstant.baseUrl +
-                                    product.gallery[random.nextInt(3)],
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: 50,
-                              ),
-                            ),
-                            options: CarouselOptions(
-                                // height: 150.0,
-                                autoPlay: true,
-                                enlargeCenterPage: true,
-                                aspectRatio: 16 / 9,
-                                autoPlayCurve: Curves.fastOutSlowIn,
-                                enableInfiniteScroll: true,
-                                autoPlayAnimationDuration:
-                                    const Duration(milliseconds: 800),
-                                // aspectRatio: 16/9,
-                                // viewportFraction: 1,
-
-                                onPageChanged: (index, reason) {
-                                  setState(() {});
-                                }),
-                          ),
-                          const Flexible(
-                            child: FractionallySizedBox(
-                              heightFactor: 0.09,
-                            ),
-                          ),
-                          Text(
-                            product.address.toString(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.alike(
-                              fontSize: 20,
-                              textStyle:
-                                  Theme.of(context).textTheme.displaySmall,
-                            ),
-                          ),
-                          const Flexible(
-                            child: FractionallySizedBox(
-                              heightFactor: 0.09,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 5,
-                            ),
-                            padding: const EdgeInsets.fromLTRB(80, 10, 80, 10),
-                            decoration: const BoxDecoration(
-                                color: Color(0xFFC91A1A),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30),),),
-                            child: Text(
-                              'Số Lượng : 99+',
-                              maxLines: 1,
-                              style: GoogleFonts.amita(
-                                fontSize: 20,
-                                color: const Color(0xFFEFF5EF),
-                                textStyle:
-                                    Theme.of(context).textTheme.displaySmall,
-                              ),
-                            ),
-                          ),
-                          const Flexible(
-                            child: FractionallySizedBox(
-                              heightFactor: 0.09,
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 5,
-                            ),
-                            padding: const EdgeInsets.fromLTRB(80, 10, 80, 10),
-                            decoration: const BoxDecoration(
-                                color: Colors.teal,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30))),
-                            child: Text(
-                              "Giá : ${NumberFormat("#,###", "en_US").format(product.price)} đ",
-                              style: GoogleFonts.amita(
-                                fontSize: 20,
-                                color: const Color(0xFFEFF5EF),
-                                textStyle:
-                                    Theme.of(context).textTheme.displaySmall,
-                              ),
-                            ),
-                          ),
-                          const Flexible(
-                            child: FractionallySizedBox(
-                              heightFactor: 0.49,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ]),
-        ),
-      ),
-    );
-  }
 }

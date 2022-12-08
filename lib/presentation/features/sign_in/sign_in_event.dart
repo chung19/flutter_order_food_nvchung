@@ -17,3 +17,11 @@ class SignInSuccessEvent extends BaseEvent {
   @override
   List<Object?> get props => [message];
 }
+class SignInFailEvent extends BaseEvent {
+  String message;
+
+  SignInFailEvent({required this.message});
+  @override
+  List<Object?> get props => [];
+
+}
