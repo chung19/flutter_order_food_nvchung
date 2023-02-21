@@ -1,4 +1,4 @@
-import 'dart:math';
+
 import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -14,14 +14,17 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/constants/api_constant.dart';
+import '../../../common/constants/style_constant.dart';
 import '../../../common/constants/variable_constant.dart';
 import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../data/datasources/remote/api_request.dart';
 import '../../../data/model/cart.dart';
 import '../../plugin/slider_banner.dart';
+import 'child_home_widget/button_base.dart';
 
 class HomePage extends StatefulWidget {
+
   const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -29,6 +32,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var gallery = ApiConstant.baseUrl;
   Future<void> handleButtonSignOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     showDialog(
@@ -85,9 +89,12 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: const Color(0xFF1ebd60),
         title: const Center(child: Text("Home")),
         leading: IconButton(
-          icon: Tab(icon: Image.asset("assets/images/boy.png",height:50,fit: BoxFit.fill,), ),iconSize: 2,
+          icon: Image.asset("assets/images/boy.png",height:50,fit: BoxFit.fill,),
           onPressed: () {
-            handleButtonSignOut();
+            setState(() {
+              handleButtonSignOut();
+            },);
+
           },
         ),
         actions: [
@@ -118,14 +125,14 @@ class _HomePageState extends State<HomePage> {
                       if (count == null || count.isEmpty || count == "0") {
                         return Container(
                           margin: const EdgeInsets.only(right: 10, top: 10),
-                          child: Icon(Icons.shopping_cart_outlined),
+                          child: const Icon(Icons.shopping_cart_outlined),
                         );
                       } else {
                         return Container(
                           margin: const EdgeInsets.only(right: 10, top: 10),
                           child: Badge(
                             badgeContent: Text(count),
-                            child: Icon(Icons.shopping_cart_outlined),
+                            child: const Icon(Icons.shopping_cart_outlined),
                           ),
                         );
                       }
@@ -156,7 +163,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ],
-      child: HomeContainer(),
+      child: const HomeContainer(),
     );
   }
 }
@@ -171,10 +178,10 @@ class HomeContainer extends StatefulWidget {
 class _HomeContainerState extends State<HomeContainer> {
   late HomeBloc _homeBloc;
 
+
   @override
   void initState() {
     super.initState();
-
     _homeBloc = context.read<HomeBloc>();
     _homeBloc.eventSink.add(GetListProductEvent());
     _homeBloc.eventSink.add(FetchCartEvent());
@@ -186,6 +193,7 @@ class _HomeContainerState extends State<HomeContainer> {
       },
     );
   }
+
 
   void addCart(String idProduct) {
     _homeBloc.eventSink.add(AddCartEvent(idProduct: idProduct));
@@ -203,14 +211,14 @@ class _HomeContainerState extends State<HomeContainer> {
                 children: [
                   TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text(
+                      child: const Text(
                         "Cancel",
-                        style: TextStyle(color: Colors.grey[400], fontSize: 16),
+                        style: handleButtonDetailCanelTextStyle,
                       )),
                   TextButton(
                       onPressed: () {
-                        addCart(product.id);
-                        Navigator.pop(context);
+                          handleButtonDetail(product, context);
+
                       },
                       child:    Container(
                                       margin: const EdgeInsets.symmetric(
@@ -222,7 +230,7 @@ class _HomeContainerState extends State<HomeContainer> {
                                           borderRadius:
                                           BorderRadius.all(Radius.circular(30))),
                                       child: Text("Buy Now ",style:GoogleFonts.antonio(
-                                      color: Color(0xFFF1F5F1),
+                                      color: const Color(0xFFF1F5F1),
                                     ) ,),
                                   ),),
               ],
@@ -255,7 +263,7 @@ class _HomeContainerState extends State<HomeContainer> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.network(
-                          "https://serverappsale.herokuapp.com/$e",
+                          "https://serverappsale.onrender.com/$e",
                           fit: BoxFit.cover,
                           width: 1000,
                         ),
@@ -269,8 +277,8 @@ class _HomeContainerState extends State<HomeContainer> {
                       enableInfiniteScroll: true,
                       reverse: false,
                       autoPlay: true,
-                      autoPlayInterval: Duration(seconds: 3),
-                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayInterval: const Duration(seconds: 3),
+                      autoPlayAnimationDuration: const Duration(milliseconds: 800),
                       autoPlayCurve: Curves.fastOutSlowIn,
                       enlargeCenterPage: true,
                       scrollDirection: Axis.horizontal,
@@ -327,12 +335,13 @@ class _HomeContainerState extends State<HomeContainer> {
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
     return SafeArea(
-        child: SizedBox(
+        child: Container(
+        
       child: Stack(
         children: [
           ListView(
               children: [
-                         SliderBanner(),
+                         const SliderBanner(),
                 StreamBuilder<List<Product>>(
                     initialData: const [],
                     stream: _homeBloc.listProductController.stream,
@@ -375,17 +384,20 @@ class _HomeContainerState extends State<HomeContainer> {
                           ],
                         );
                       }
-                      return ListView.builder(
-                          // scrollDirection: Axis.vertical,
-                      // scrollDirection: Axis.horizontal,
-                      //     shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
+
+                      return GridView.builder(
+
                           shrinkWrap: true,
-                          physics: const ClampingScrollPhysics(),
-                          itemCount: snapshot.data?.length ?? 0,
+                          physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      childAspectRatio: 0.9,),
+                          itemCount: snapshot.data?.length ,
                           itemBuilder: (context, index) {
-                            // return _buildSlider(snapshot.data?[index], context);
                             return _buildItemFood(snapshot.data?[index]);
+
                           });
                     }),
 
@@ -403,22 +415,23 @@ class _HomeContainerState extends State<HomeContainer> {
   Widget _buildItemFood(Product? product) {
     if (product == null) return Container();
     return SizedBox(
-      height: 135,
+
       child: Card(
         elevation: 5,
-        // shadowColor: Colors.blueGrey,
+         shadowColor: Colors.blueGrey,
         child: Container(
+
           padding: const EdgeInsets.only(top: 5, bottom: 5),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
 
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Image.network(
                     ApiConstant.baseUrl + (product?.img).toString(),
-                    width: 150,
-                    height: 120,
+                    width: 160,
+                    height: 90,
                     fit: BoxFit.fill),
               ),
               Expanded(
@@ -440,58 +453,44 @@ class _HomeContainerState extends State<HomeContainer> {
                         style: const TextStyle(fontSize: 12),
                       ),
                       Row(mainAxisSize: MainAxisSize.min, children: [
-                        ElevatedButton(
+                        MyCustomButton(
                           onPressed: () {
-                            print('test add cart');
                             _homeBloc.eventSink
                                 .add(AddCartEvent(idProduct: product.id));
-                          },
-                          style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.resolveWith((states) {
-                                if (states.contains(MaterialState.pressed)) {
-                                  return const Color.fromARGB(
-                                      188, 157, 201, 10);
-                                } else {
-                                  return const Color.fromARGB(
-                                      230, 240, 102, 61);
-                                }
-                              }),
-                              shape: MaterialStateProperty.all(
-                                  const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))))),
-                          child: const Text("Thêm vào giỏ",
-                              style: TextStyle(fontSize: 14)),
+                          },// Nội dung của button
+                          backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+
+                            if (states.contains(MaterialState.pressed)) {
+                              return const Color.fromARGB(
+                                  188, 157, 201, 10);
+                            }
+                            return const Color.fromARGB(
+                                230, 240, 102, 61);
+                          }),
+                          child: const Text("thêm vào giỏ",
+                              style: TextStyle(fontSize: 10)),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                              handleButtonDetail(product, context);
-                                },);
-                            },
-                            style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.pressed)) {
-                                    return const Color.fromARGB(
-                                        200, 11, 22, 142);
-                                  } else {
-                                    return const Color.fromARGB(
-                                        230, 11, 22, 142);
-                                  }
-                                }),
-                                shape: MaterialStateProperty.all(
-                                    const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10))))),
-                            child: Text("Chi tiết",
-                                style: const TextStyle(fontSize: 14)),
-                          ),
-                        ),
-                      ]),
+                     const SizedBox(width: 2,),
+          MyCustomButton(
+            onPressed: () {
+              setState(() {
+                handleButtonDetail(product, context);
+              },);
+
+            },// Nội dung của button
+            backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
+
+              if (states.contains(MaterialState.pressed)) {
+                return const Color.fromARGB(
+                    230, 11, 22, 142);
+              }
+              return const Color.fromARGB(
+                  200, 11, 22, 142); /// Màu sắc mặc định
+            }),
+            child: const Text("Chi tiết",style: TextStyle(fontSize: 10),
+
+          ),
+          ) ]),
                     ],
                   ),
                 ),

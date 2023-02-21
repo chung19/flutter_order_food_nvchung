@@ -24,20 +24,20 @@ Future  confirmCart(String idCart,) {
     return apiRequest.confirmCard(idCart, );
   }
 
-  Future<String> oldConfirm(String idCart) {
-    Completer<String> completer = Completer();
-    _dio.post(ApiConstant.conformCartUrl,  data: {
-      "id_cart": idCart,
-      "status": false})
-        .then((response){
-      completer.complete(response.data["data"]);
-    }).catchError((error) {
-      if (error is DioError) {
-        completer.completeError((error).response?.data["message"]);
-      } else {
-        completer.completeError(error);
-      }
-    });
-    return completer.future;
-  }
+  // Future<String> oldConfirm(String idCart) {
+  //   Completer<String> completer = Completer();
+  //   _dio.post(ApiConstant.conformCartUrl,  data: {
+  //     "id_cart": idCart,
+  //     "status": false})
+  //       .then((response){
+  //     completer.complete(response.data["data"]);
+  //   }).catchError((error) {
+  //     if (error is DioError) {
+  //       completer.completeError((error).response?.data["message"]);
+  //     } else {
+  //       completer.completeError(error);
+  //     }
+  //   });
+  //   return completer.future;
+  // }
 }

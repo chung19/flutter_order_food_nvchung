@@ -11,23 +11,15 @@ class PageContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return shouldRenderPage();
-  }
-
-  Widget shouldRenderPage() {
-    if (providers.isNotEmpty) {
-      return MultiProvider(
-        providers: [...providers],
-        child: Scaffold(
-          appBar: appBar,
-          body: child,
-        ),
-      );
-    } else {
-      return Scaffold(
+// Tối ưu hàm shouldRenderPage bằng cách truyền providers vào MultiProvider trực tiếp
+    return MultiProvider(
+      providers: providers,
+      child: Scaffold(
         appBar: appBar,
         body: child,
-      );
-    }
+      ),
+    );
   }
 }
+
+// Xóa hàm shouldRenderPage vì nó không còn cần thiết nữa

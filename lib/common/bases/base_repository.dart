@@ -3,9 +3,9 @@
 import '../../data/datasources/remote/api_request.dart';
 
 abstract class BaseRepository {
-  ApiRequest apiRequest= ApiRequest();
-
+  ApiRequest _apiRequest = ApiRequest();
+  ApiRequest get apiRequest => _apiRequest;
   void updateRequest(ApiRequest apiRequest) {
-    this.apiRequest = apiRequest;
+    _apiRequest = apiRequest;
   }
 }

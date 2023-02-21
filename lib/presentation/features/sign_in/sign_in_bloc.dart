@@ -48,4 +48,5 @@ class SignInBloc extends BaseBloc {
     }
     loadingSink.add(false);
   }
+
 }

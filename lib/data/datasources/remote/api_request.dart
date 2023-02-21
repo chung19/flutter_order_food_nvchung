@@ -37,7 +37,7 @@ class ApiRequest {
     return _dio.get(ApiConstant.cartUrl);
   }
 
-  Future getOrder() {
+  Future getOrder( ) {
     return _dio.get(ApiConstant.orderHistoryCart);
   }
 

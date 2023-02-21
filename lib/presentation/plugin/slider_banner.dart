@@ -13,28 +13,28 @@ class SliderBanner extends StatelessWidget {
           margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
-            image:  DecorationImage(
-              image: NetworkImage("https://assets.materialup.com/uploads/3d93aeff-2058-4e83-bb26-92a2fae5ba2d/preview.jpg"),
+            image:   const DecorationImage(
+              image: ResizeImage(NetworkImage("https://assets.materialup.com/uploads/3d93aeff-2058-4e83-bb26-92a2fae5ba2d/preview.jpg"),width: 820 ,height: 304),
               fit: BoxFit.cover,
             ),
           ),
         ),
         Container(
-          margin: EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            image: DecorationImage(
-              image: NetworkImage("https://img.lovepik.com/free-template/bg/20200922/bg/afe571a58445a_415745.png_list.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
-          margin: EdgeInsets.all(8.0),
+          margin: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             image: const DecorationImage(
-              image: NetworkImage("http://d3design.vn/uploads/Anh_Bia_Food_menu_web_banner_social_media_banner_template_Free_Psd.jpg"),
+              image: ResizeImage(NetworkImage("https://img.lovepik.com/free-template/bg/20200922/bg/afe571a58445a_415745.png_list.jpg"),width: 820, height: 358),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            image: const DecorationImage(
+              image: ResizeImage(NetworkImage("http://d3design.vn/uploads/Anh_Bia_Food_menu_web_banner_social_media_banner_template_Free_Psd.jpg"),width: 820,height: 366),
               fit: BoxFit.cover,
             ),
           ),
@@ -47,7 +47,7 @@ class SliderBanner extends StatelessWidget {
         aspectRatio: 16 / 9,
         autoPlayCurve: Curves.fastOutSlowIn,
         enableInfiniteScroll: true,
-        autoPlayAnimationDuration: Duration(milliseconds: 800),
+        autoPlayAnimationDuration: const Duration(milliseconds: 800),
         viewportFraction: 0.8,
       ),
     );

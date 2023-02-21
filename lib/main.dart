@@ -1,6 +1,6 @@
 // @dart=2.9
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_order_food_nvchung/presentation/features/order/order_page.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/sign_in/sign_in_page.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/sign_up/sign_up_page.dart';
@@ -12,20 +12,27 @@ import 'presentation/features/home/home_page.dart';
 import 'presentation/features/splash/splash_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(DevicePreview(
+    enabled: true,
+
+    builder: (context) => MyApp(),
+  ));
 
 
   AppCache.init();
 }
 
 class MyApp extends StatelessWidget {
-
+  const MyApp({Key key}) : super(key: key);
   // const MyApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
 

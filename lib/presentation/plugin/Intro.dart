@@ -146,7 +146,7 @@ class _IntroState extends State<Intro> {
                 borderRadius:
                 BorderRadius.all(Radius.circular(30))),
             child:  Text("Skip",style: GoogleFonts.atomicAge(
-              color: Color(0xFFF3F6F3),
+              color: const Color(0xFFF3F6F3),
             ),
             ),
 
@@ -162,7 +162,7 @@ class _IntroState extends State<Intro> {
               BorderRadius.all(Radius.circular(30))),
 
           child: Text(" Next",style: GoogleFonts.atomicAge(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           ),),
         ),
         done: TextButton(

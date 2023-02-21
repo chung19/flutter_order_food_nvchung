@@ -12,7 +12,7 @@ import '../../../data/model/product.dart';
 
 class OrderBloc extends BaseBloc {
   StreamController<List<Order>> orderController = StreamController.broadcast();
-  StreamController<String> message = StreamController();
+  StreamController<String> messageOderController = StreamController();
   late OrderRepository _orderRepository;
   late ProductDto productDto;
   void updateRepository({required OrderRepository orderRepository}) {
@@ -23,37 +23,71 @@ class OrderBloc extends BaseBloc {
   void dispatch(BaseEvent event) {
     switch (event.runtimeType) {
       case FetchOrderEvent:
-       oldFetchOrder(event as FetchOrderEvent);
+        oldFetchOrder(event as FetchOrderEvent);
         break;
     }
   }
-  void fetchOrder(FetchOrderEvent event)async{
+  void fetchOrderBase(FetchOrderEvent event) async {
+    final data = await handleResponse<OrderDto>(
+        _orderRepository.getOrder(), OrderDto.convertJson);
+    if (data != null) {
+      List<Order> orders = [Order(
+          data.id,
+          data.products?.map((dto) {
+            return Product(dto.id, dto.name, dto.address, dto.price, dto.img,
+                dto.quantity, dto.gallery);
+          }).toList(),
+          data?.img,
+          data?.price,
+          data?.status,
+          data?.date_created)];
+      orderController.sink.add(orders);
+    }
+  }
+
+  void fetchOrderBases(FetchOrderEvent event) async {
+    final data = await handleResponse<OrderDto>(
+        _orderRepository.getOrder(), OrderDto.convertJson);
+    if (data != null) {
+      Order order = Order(
+          data.id,
+          data.products?.map((dto) {
+            return Product(dto.id, dto.name, dto.address, dto.price, dto.img,
+                dto.quantity, dto.gallery);
+          }).toList(),
+          data?.img,
+          data?.price,
+          data?.status,
+          data?.date_created);
+      // orderController.sink.add();
+    }
+  }
+
+  void fetchOrder(FetchOrderEvent event) async {
     loadingSink.add(true);
     try {
       Response response = await _orderRepository.getOrder();
       AppResponse<Order> orderListsData =
-      AppResponse.fromJson(response.data, OrderDto.convertJson);
-    //   orderController.sink.add (Order(
-    //     orderListsData.data?.id ,
-    // orderListsData.data?.products?.map((productDto) {
-    //   => Product(
-    //       productDto.id,
-    //       productDto.name,
-    //       productDto.address,
-    //       productDto.price,
-    //       productDto.img,
-    //       productDto.quantity,
-    //       productDto.gallery);
-    // });
-    // orderListsData.data?.img ,
-    // orderListsData.data?.price ,
-    // orderListsData.data?.status ,
-    // orderListsData.data?.date_created
-    //   ) );
+          AppResponse.fromJson(response.data, OrderDto.convertJson);
+      //   orderController.sink.add (Order(
+      //     orderListsData.data?.id ,
+      // orderListsData.data?.products?.map((productDto) {
+      //   => Product(
+      //       productDto.id,
+      //       productDto.name,
+      //       productDto.address,
+      //       productDto.price,
+      //       productDto.img,
+      //       productDto.quantity,
+      //       productDto.gallery);
+      // });
+      // orderListsData.data?.img ,
+      // orderListsData.data?.price ,
+      // orderListsData.data?.status ,
+      // orderListsData.data?.date_created
+      //   ) );
 
-
-
-    }on DioError catch (e) {
+    } on DioError catch (e) {
       orderController.sink.addError(e.response?.data["message"]);
       messageSink.add(e.response?.data["message"]);
     } catch (e) {
@@ -61,7 +95,9 @@ class OrderBloc extends BaseBloc {
     }
     loadingSink.add(false);
   }
-  void oldFetchOrder(  FetchOrderEvent event) {
+
+
+  void oldFetchOrder(FetchOrderEvent event) {
     loadingSink.add(true);
     _orderRepository.fetchOrderHistory().then((orderListsData) {
       orderController.sink.add(orderListsData.map((order) {
@@ -69,13 +105,13 @@ class OrderBloc extends BaseBloc {
             order.id,
             order.products
                 ?.map((productDto) => Product(
-                productDto.id,
-                productDto.name,
-                productDto.address,
-                productDto.price,
-                productDto.img,
-                productDto.quantity,
-                productDto.gallery))
+                    productDto.id,
+                    productDto.name,
+                    productDto.address,
+                    productDto.price,
+                    productDto.img,
+                    productDto.quantity,
+                    productDto.gallery))
                 .toList(),
             order.img,
             order.price,
@@ -83,10 +119,15 @@ class OrderBloc extends BaseBloc {
             order.date_created);
       }).toList());
     }).catchError((e) {
-      message.sink.add(e);
+      messageOderController.sink.add(e);
     }).whenComplete(() => loadingSink.add(false));
   }
 
-
-
+  @override
+  void dispose() {
+    orderController.close();
+    messageOderController.close();
+    messageSink.close();
+    loadingSink.close();
+  }
 }

@@ -16,7 +16,7 @@ class _SplashPageState extends State<SplashPage> {
   Future<void> didChangeDependencies() async {
     super.didChangeDependencies();
     bool firstRun = await IsFirstRun.isFirstRun();
-    Future.delayed ( Duration (seconds: 2 )
+    Future.delayed ( const Duration (seconds: 2 )
     , () {
 
     String token = AppCache.getString(VariableConstant.token);
@@ -36,7 +36,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return  Container(
-      color: Color(0xFF50baff),
+      color: const Color(0xFF50baff),
       width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(

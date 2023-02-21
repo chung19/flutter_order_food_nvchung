@@ -141,7 +141,7 @@ class _CartContainerState extends State<CartContainer> {
                               context: context,
                               builder: (_) {
                                 return AlertDialog(
-                                  title: Text(
+                                  title: const Text(
                                     "Đặt hàng?",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -181,13 +181,13 @@ class _CartContainerState extends State<CartContainer> {
                                 );
                               });
                         },
-                        child: Text(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+                          minimumSize: const Size.fromHeight(50),
+                        ),
+                        child: const Text(
                           "Thanh toán",
                           style: TextStyle(fontSize: 16),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Color.fromARGB(255, 255, 0, 0),
-                          minimumSize: const Size.fromHeight(50),
                         ),
                       ),
                     ),
@@ -316,7 +316,7 @@ class _CartContainerState extends State<CartContainer> {
                             },style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white, // Background color
                           ),
-                           child: const Icon(FontAwesomeIcons.add,
+                           child: const Icon(FontAwesomeIcons.plus,
                             color: Colors.black54, //<-- SEE HERE
                           ),
                           )

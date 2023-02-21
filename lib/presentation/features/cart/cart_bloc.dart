@@ -14,6 +14,7 @@ class CartBloc extends BaseBloc {
   StreamController<String> message = StreamController();
   final StreamController<BaseEvent> _progressController = BehaviorSubject();
   late CartRepository _cartRepository;
+  @override
   Stream<BaseEvent> get progressStream => _progressController.stream;
   void updateRepository({required CartRepository cartRepository}) {
     _cartRepository = cartRepository;
@@ -24,17 +25,71 @@ class CartBloc extends BaseBloc {
   void dispatch(BaseEvent event) {
     switch (event.runtimeType) {
       case FetchCartEvent:
-        fetchCart();
+        _fetchCartBase();
         break;
       case UpdateCartEvent:
         updateCart(event as UpdateCartEvent);
         break;
       case CartConform:
-       conform(event as CartConform);
+       conformBase2(event as CartConform);
         break;
     }
   }
 
+  void _fetchCartBase()async{
+    final data = await handleResponse<CartDto>(_cartRepository.getCart(), CartDto.convertJson);
+    if (data != null) {
+      Cart cart = Cart(
+        data.id,
+        data.products?.map((dto) {
+          return Product(dto.id, dto.name, dto.address, dto.price, dto.img,
+              dto.quantity, dto.gallery);
+        }).toList(),
+        data.price,
+        data.idUser,
+      );
+      cartController.sink.add(cart);
+    }
+  }
+  void updateCartBase(UpdateCartEvent event)async{
+    final data = await handleResponse<CartDto>(_cartRepository.updateCart(event.idCart, event.quantity,event.idProduct), CartDto.convertJson);
+ if(data!=null){
+   cartController.sink.add(Cart(
+       data?.id,
+      data?.products?.map((data) {
+         return Product(data.id, data.name, data.address, data.price,
+             data.img, data.quantity, data.gallery);
+       }).toList(),
+     data?.price));
+ }
+  }
+void conformBase(CartConform event)async {
+    final data = await handleResponse<CartDto>(_cartRepository.confirmCart(event.idCart), CartDto.convertJson);
+if (data != null) {
+  cartController.sink.add(Cart("", [], -1));
+  progressSink.add(CartConFormSuccessEvent(
+    message: "thanh toán thành công (^_^)",
+
+  ));
+}
+}
+  void conformBase2(CartConform event) async {
+    print('object1');
+    final data = await handleResponse<CartDto>(
+      _cartRepository.confirmCart(event.idCart),
+      CartDto.convertJson,
+    );
+    print('object2');
+    if (data != null) {
+      print('object3');
+      cartController.sink.add(Cart("", [], -1));
+      print('object1=4');
+      progressSink.add(CartConFormSuccessEvent(
+        message: "thanh toán thành công (^_^)",
+      ),
+      );  print('object5');
+    }
+  }
 
   void fetchCart() async {
     loadingSink.add(true);
@@ -54,9 +109,9 @@ class CartBloc extends BaseBloc {
       cartController.sink.add(cart);
     } on DioError catch (e) {
       cartController.sink.addError(e.response?.data["message"]);
-      messageSink.add(e.response?.data["message"]);
+      message.sink.add(e.response?.data["message"]);
     } catch (e) {
-      messageSink.add(e.toString());
+      message.sink.add(e.toString());
     }
     loadingSink.add(false);
   }
@@ -77,7 +132,7 @@ class CartBloc extends BaseBloc {
      }
      on DioError catch (e) {
   cartController.sink.addError(e.response?.data["message"]);
-  messageSink.add(e.response?.data["message"]);
+  message.sink.add(e.response?.data["message"]);
   } catch (e) {
   messageSink.add(e.toString());
   }
@@ -91,34 +146,25 @@ class CartBloc extends BaseBloc {
      cartController.sink.add(Cart("", [], -1));
 
      progressSink.add(CartConFormSuccessEvent(
-       message: "Đăng nhập thành công",
+       message: "thanh toán thành công",
 
      ));
     } on DioError catch (e) {
       cartController.sink.addError(e.response?.data["message"]);
 
-      messageSink.add(e.response?.data["message"]);
+      message.sink.add(e.response?.data["message"]);
     } catch (e) {
-      messageSink.add(e.toString());
+      message.sink.add(e.toString());
     }
     loadingSink.add(false);
   }
-  void  oldConform(CartConform event) {
-    loadingSink.add(true);
-    _cartRepository.oldConfirm(event.idCart).then((cartData) {
-      // cartController.sink.add(Cart("", [], -1));
-      progressSink.add(CartConFormSuccessEvent(
-        message: "Đăng nhập thành công",
 
-      ));
-    }).catchError((e) {
-      message.sink.add(e);
-    }).whenComplete(() => loadingSink.add(false));
-  }
   @override
   void dispose() {
     super.dispose();
     cartController.close();
     message.close();
+    _progressController.close();
+
   }
 }

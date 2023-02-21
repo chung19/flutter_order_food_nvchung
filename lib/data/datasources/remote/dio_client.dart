@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import '../../../common/constants/api_constant.dart';
 import '../../../common/constants/variable_constant.dart';
 import '../local/cache/app_cache.dart';
+
 class DioClient {
   Dio? _dio;
   static final BaseOptions _options = BaseOptions(
@@ -13,10 +14,10 @@ class DioClient {
   static final DioClient instance = DioClient._internal();
 
   DioClient._internal() {
-    if (_dio == null){
+    if (_dio == null) {
       _dio = Dio(_options);
       _dio?.interceptors.add(LogInterceptor(requestBody: true));
-      _dio?.interceptors.add(InterceptorsWrapper(onRequest: (options, handler){
+      _dio?.interceptors.add(InterceptorsWrapper(onRequest: (options, handler) {
         String token = AppCache.getString(VariableConstant.token);
         if (token.isNotEmpty) {
           options.headers["Authorization"] = "Bearer $token";
@@ -24,7 +25,7 @@ class DioClient {
         return handler.next(options);
       }, onResponse: (response, handler) {
         return handler.next(response);
-      }, onError: (e, handler){
+      }, onError: (e, handler) {
         return handler.next(e);
       }));
     }
