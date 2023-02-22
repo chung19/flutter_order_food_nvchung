@@ -13,7 +13,7 @@ class ProgressListenerWidget<T extends BaseBloc> extends StatefulWidget {
   final Widget child;
   final Function(BaseEvent event) callback;
 
-  const ProgressListenerWidget({required this.child, required this.callback});
+  const ProgressListenerWidget({super.key, required this.child, required this.callback});
 
   @override
   _ProgressListenerWidgetState createState() =>
@@ -27,8 +27,8 @@ class _ProgressListenerWidgetState<T> extends State<ProgressListenerWidget> {
 
     var bloc = context.read<T>() as BaseBloc;
     bloc.progressStream.listen((event) {
-        widget.callback(event);
-      },
+      widget.callback(event);
+    },
     );
   }
 

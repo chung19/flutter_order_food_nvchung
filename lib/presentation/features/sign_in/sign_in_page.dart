@@ -8,7 +8,7 @@ import 'package:flutter_order_food_nvchung/data/repositories/authentication_repo
 import 'package:flutter_order_food_nvchung/presentation/features/sign_in/sign_in_bloc.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/sign_in/sign_in_event.dart';
 import 'package:provider/provider.dart';
-
+// current
 import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
 
@@ -145,7 +145,7 @@ class _SignInContainerState extends State<SignInContainer> {
         margin: const EdgeInsets.only(bottom: 10,left: 10, right: 10,top: 0),
         child: SingleChildScrollView(
           child: Row(
-             crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
@@ -178,7 +178,7 @@ class _SignInContainerState extends State<SignInContainer> {
                       borderRadius: BorderRadius.all(Radius.circular(5))),
                   child: const Text("Sign Up !",
                       style: TextStyle(
-                          color: Color(0xFF536251), )),
+                        color: Color(0xFF536251), )),
                 ),
               )
             ],

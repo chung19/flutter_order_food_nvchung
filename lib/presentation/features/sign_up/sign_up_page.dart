@@ -42,7 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
           },
         ),
       ],
-      child: SignUpContainer(),
+      child: const SignUpContainer(),
     );
   }
 }
@@ -113,15 +113,15 @@ class _SignUpContainerState extends State<SignUpContainer> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 _buildNameTextField(nameController),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 _buildAddressTextField(addressController),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 _buildEmailTextField(emailController),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 _buildPhoneTextField(phoneController),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 _buildPasswordTextField(passwordController),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 _buildButtonSignUp(() {
                                   clickSignUp(emailController.text, nameController.text, passwordController.text, addressController.text, phoneController.text);
                                 })
@@ -154,7 +154,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
 
   Widget _buildNameTextField(TextEditingController controller) {
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: TextField(
         maxLines: 1,
         controller: controller,
@@ -164,17 +164,17 @@ class _SignUpContainerState extends State<SignUpContainer> {
           hintText: "Example : Mr. John",
           fillColor: Colors.black12,
           filled: true,
-          prefixIcon: Icon(Icons.person, color: Colors.blue),
-          labelStyle: TextStyle(color: Colors.blue),
+          prefixIcon: const Icon(Icons.person, color: Colors.blue),
+          labelStyle: const TextStyle(color: Colors.blue),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
         ),
       ),
     );
@@ -182,7 +182,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
 
   Widget _buildAddressTextField(TextEditingController controller) {
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: TextField(
         maxLines: 1,
         controller: controller,
@@ -192,17 +192,17 @@ class _SignUpContainerState extends State<SignUpContainer> {
           hintText: "Example : district 1",
           fillColor: Colors.black12,
           filled: true,
-          prefixIcon: Icon(Icons.map, color: Colors.blue),
-          labelStyle: TextStyle(color: Colors.blue),
+          prefixIcon: const Icon(Icons.map, color: Colors.blue),
+          labelStyle: const TextStyle(color: Colors.blue),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
         ),
       ),
     );
@@ -210,7 +210,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
 
   Widget _buildEmailTextField(TextEditingController controller) {
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: TextField(
         maxLines: 1,
         controller: controller,
@@ -220,17 +220,17 @@ class _SignUpContainerState extends State<SignUpContainer> {
           hintText: "Email : abc@gmail.com",
           fillColor: Colors.black12,
           filled: true,
-          prefixIcon: Icon(Icons.email, color: Colors.blue),
-          labelStyle: TextStyle(color: Colors.blue),
+          prefixIcon: const Icon(Icons.email, color: Colors.blue),
+          labelStyle: const TextStyle(color: Colors.blue),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
         ),
       ),
     );
@@ -238,7 +238,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
 
   Widget _buildPhoneTextField(TextEditingController controller) {
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: TextField(
         maxLines: 1,
         controller: controller,
@@ -248,17 +248,17 @@ class _SignUpContainerState extends State<SignUpContainer> {
           hintText: "Phone ((+84) 123 456 789)",
           fillColor: Colors.black12,
           filled: true,
-          labelStyle: TextStyle(color: Colors.blue),
+          labelStyle: const TextStyle(color: Colors.blue),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
-          prefixIcon: Icon(Icons.phone, color: Colors.blue),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
+          prefixIcon: const Icon(Icons.phone, color: Colors.blue),
         ),
       ),
     );
@@ -266,7 +266,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
 
   Widget _buildPasswordTextField(TextEditingController controller) {
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       child: TextField(
         maxLines: 1,
         controller: controller,
@@ -277,17 +277,17 @@ class _SignUpContainerState extends State<SignUpContainer> {
           hintText: "Pass word",
           fillColor: Colors.black12,
           filled: true,
-          labelStyle: TextStyle(color: Colors.blue),
+          labelStyle: const TextStyle(color: Colors.blue),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),
-              borderSide: BorderSide(width: 0, color: Colors.black12)),
-          prefixIcon: Icon(Icons.lock, color: Colors.blue),
+              borderSide: const BorderSide(width: 0, color: Colors.black12)),
+          prefixIcon: const Icon(Icons.lock, color: Colors.blue),
         ),
       ),
     );
@@ -295,7 +295,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
 
   Widget _buildButtonSignUp(Function()? function) {
     return Container(
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         child: ElevatedButtonTheme(
             data: ElevatedButtonThemeData(
                 style: ButtonStyle(
@@ -309,12 +309,12 @@ class _SignUpContainerState extends State<SignUpContainer> {
                   }),
                   elevation: MaterialStateProperty.all(5),
                   padding: MaterialStateProperty.all(
-                      EdgeInsets.symmetric(vertical: 5, horizontal: 100)),
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 100)),
                 )),
             child: ElevatedButton(
-              child: Text("Register",
-                  style: TextStyle(fontSize: 18, color: Colors.white)),
               onPressed: function,
+              child: const Text("Register",
+                  style: TextStyle(fontSize: 18, color: Colors.white)),
             )));
   }
 }

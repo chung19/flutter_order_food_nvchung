@@ -1,8 +1,34 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:rxdart/rxdart.dart';
+import '../../data/datasources/remote/app_response.dart';
 import 'base_event.dart';
 
 abstract class BaseBloc {
+
+
+  Future<T?> handleResponse<T>(
+  Future<dynamic> responseFuture, Function convertJson) async {
+    loadingSink.add(true);
+    T? data ;
+    try {
+      Response response = await responseFuture;
+      AppResponse<T> appResponse =
+      AppResponse.fromJson(response.data, convertJson);
+      data = appResponse.data;
+    } on DioError catch (e) {
+      messageSink.add(e.response?.data["message"]);
+    } catch (e) {
+      messageSink.add(e.toString());
+    }
+    loadingSink.add(false);
+    return data;
+  }
+
+
+
+
+
   final StreamController<BaseEvent> _eventStreamController = StreamController();
   final StreamController<bool> _loadingController = StreamController.broadcast();
   final StreamController<BaseEvent> _progressController = BehaviorSubject();
@@ -22,11 +48,16 @@ abstract class BaseBloc {
     });
   }
 
+
+
   void dispatch(BaseEvent event);
 
   void dispose() {
     _eventStreamController.close();
-    _loadingController.close();
-    _progressController.close();
+    loadingSink.close();
+    // _loadingController.close();
+    // _progressController.close();
+    // _messageController.close();
+    // messageSink.close();
   }
 }

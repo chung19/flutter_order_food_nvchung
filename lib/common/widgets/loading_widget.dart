@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import '../bases/base_bloc.dart';
-
 class LoadingWidget extends StatelessWidget {
   final Widget child;
   final BaseBloc bloc;
 
-  LoadingWidget({
+  const LoadingWidget({super.key,
     required this.child,
     required this.bloc,
   });
@@ -36,7 +35,7 @@ class LoadingWidget extends StatelessWidget {
                         color: Colors.white,
                       ),
                     )
-                  : Container(),
+                  : const SizedBox(),
             ),
           ),
         ],
