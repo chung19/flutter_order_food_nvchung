@@ -1,5 +1,4 @@
 
-import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -124,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                         return Container(
                           margin: const EdgeInsets.only(right: 10, top: 10),
                           child: Badge(
-                            badgeContent: Text(count),
+                            label: Text(count),
                             child: Icon(Icons.shopping_cart_outlined),
                           ),
                         );
