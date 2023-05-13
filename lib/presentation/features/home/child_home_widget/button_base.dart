@@ -1,24 +1,23 @@
-
 import 'package:flutter/material.dart';
 
 class MyCustomButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Widget child;
-  final MaterialStateProperty<Color?>? backgroundColor; // Thêm thuộc tính backgroundColor
+  final MaterialStateProperty<Color?>? backgroundColor;
 
   const MyCustomButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.child,
-    this.backgroundColor, // Khai báo thuộc tính backgroundColor
-  }) : super(key: key);
+    this.backgroundColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
-        backgroundColor: backgroundColor, // Sử dụng thuộc tính backgroundColor
+        backgroundColor: backgroundColor,
         shape: MaterialStateProperty.all(
           const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(

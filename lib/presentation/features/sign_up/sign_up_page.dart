@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_order_food_nvchung/common/bases/base_widget.dart';
-import 'package:flutter_order_food_nvchung/common/utils/extension.dart';
-import 'package:flutter_order_food_nvchung/presentation/features/sign_up/sign_up_bloc.dart';
-import 'package:flutter_order_food_nvchung/presentation/features/sign_up/sign_up_event.dart';
 import 'package:provider/provider.dart';
+
+import '../../../common/bases/base_widget.dart';
+import '../../../common/utils/custom_textfield.dart';
+import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../common/widgets/progress_listener_widget.dart';
 import '../../../data/datasources/remote/api_request.dart';
 import '../../../data/repositories/authentication_repository.dart';
+import '../../resources/assets-manager.dart';
+import '../../resources/strings_manager.dart';
+import '../../resources/values_manager.dart';
+import 'sign_up_bloc.dart';
+import 'sign_up_event.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({super.key});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -23,7 +28,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return PageContainer(
       appBar: AppBar(
         backgroundColor: const Color(0xFF1ebd60),
-        title: const Center(child: Text("Sign Up")),
+        title: const Center(child: Text(AppStrings.signUp)),
       ),
       providers: [
         Provider(create: (context) => ApiRequest()),
@@ -48,14 +53,18 @@ class _SignUpPageState extends State<SignUpPage> {
 }
 
 class SignUpContainer extends StatefulWidget {
-  const SignUpContainer({Key? key}) : super(key: key);
+  const SignUpContainer({super.key});
 
   @override
   State<SignUpContainer> createState() => _SignUpContainerState();
 }
 
 class _SignUpContainerState extends State<SignUpContainer> {
-  late TextEditingController emailController, phoneController, passwordController, addressController, nameController;
+  late TextEditingController emailController,
+      phoneController,
+      passwordController,
+      addressController,
+      nameController;
   late SignUpBloc _bloc;
 
   @override
@@ -71,22 +80,29 @@ class _SignUpContainerState extends State<SignUpContainer> {
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _bloc.messageStream.listen((event) {
-        showMessage(context, "Thông báo", event);
+        showMessage(context, AppStrings.notify, event);
       });
     });
   }
 
-  void clickSignUp(String email, String name, String password, String address, String phone){
-    List<String> listString = List.empty(growable: true)
-                                  ..add(email)
-                                  ..add(password)
-                                  ..add(name)
-                                  ..add(address)
-                                  ..add(phone);
+  void clickSignUp(String email, String name, String password, String address,
+      String phone) {
+    final List<String> listString = List.empty(growable: true)
+      ..add(email)
+      ..add(password)
+      ..add(name)
+      ..add(address)
+      ..add(phone);
     if (isNotEmpty(listString)) {
-      _bloc.eventSink.add(SignUpEvent(email: email, password: password, name: name, phone: phone, address: address));
+      _bloc.eventSink.add(SignUpEvent(
+          email: email,
+          password: password,
+          name: name,
+          phone: phone,
+          address: address));
     } else {
-      showMessage(context, "Thông báo", "Bạn chưa nhập đủ thông tin");
+      showMessage(
+          context, AppStrings.notify, AppStrings.doNotEnoughInformation);
     }
   }
 
@@ -96,8 +112,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Expanded(
-              flex: 2, child: Image.asset("assets/images/ic_hello_food.png")),
+          Expanded(flex: 2, child: Image.asset(ImageAssets.IcHelloFood)),
           Expanded(
               flex: 4,
               child: LayoutBuilder(
@@ -105,7 +120,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
                   return SingleChildScrollView(
                     child: ConstrainedBox(
                       constraints:
-                      BoxConstraints(minHeight: constraint.maxHeight),
+                          BoxConstraints(minHeight: constraint.maxHeight),
                       child: IntrinsicHeight(
                         child: Stack(
                           children: [
@@ -113,25 +128,34 @@ class _SignUpContainerState extends State<SignUpContainer> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 _buildNameTextField(nameController),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: AppSize.s10),
                                 _buildAddressTextField(addressController),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: AppSize.s10),
                                 _buildEmailTextField(emailController),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: AppSize.s10),
                                 _buildPhoneTextField(phoneController),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: AppSize.s10),
                                 _buildPasswordTextField(passwordController),
-                                const SizedBox(height: 10),
+                                const SizedBox(height: AppSize.s10),
                                 _buildButtonSignUp(() {
-                                  clickSignUp(emailController.text, nameController.text, passwordController.text, addressController.text, phoneController.text);
+                                  clickSignUp(
+                                      emailController.text,
+                                      nameController.text,
+                                      passwordController.text,
+                                      addressController.text,
+                                      phoneController.text);
                                 })
                               ],
                             ),
                             ProgressListenerWidget<SignUpBloc>(
                               callback: (event) {
                                 if (event is SignUpSuccessEvent) {
-                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
-                                  Navigator.pop(context, {"email": event.email, "password": event.password});
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(event.message)));
+                                  Navigator.pop(context, {
+                                    "email": event.email,
+                                    "password": event.password
+                                  });
                                 }
                               },
                               child: Container(),
@@ -153,30 +177,12 @@ class _SignUpContainerState extends State<SignUpContainer> {
   }
 
   Widget _buildNameTextField(TextEditingController controller) {
-    return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10),
-      child: TextField(
-        maxLines: 1,
-        controller: controller,
-        keyboardType: TextInputType.text,
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          hintText: "Example : Mr. John",
-          fillColor: Colors.black12,
-          filled: true,
-          prefixIcon: const Icon(Icons.person, color: Colors.blue),
-          labelStyle: const TextStyle(color: Colors.blue),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(width: 0, color: Colors.black12)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(width: 0, color: Colors.black12)),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(width: 0, color: Colors.black12)),
-        ),
-      ),
+    return CustomTextField(
+      controller: controller,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.next,
+      hintText: 'Example : Mr. John',
+      icon: const Icon(Icons.person),
     );
   }
 
@@ -189,7 +195,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          hintText: "Example : district 1",
+          hintText: 'Example : district 1',
           fillColor: Colors.black12,
           filled: true,
           prefixIcon: const Icon(Icons.map, color: Colors.blue),
@@ -217,7 +223,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          hintText: "Email : abc@gmail.com",
+          hintText: 'Email : abc@gmail.com',
           fillColor: Colors.black12,
           filled: true,
           prefixIcon: const Icon(Icons.email, color: Colors.blue),
@@ -245,7 +251,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
         keyboardType: TextInputType.phone,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          hintText: "Phone ((+84) 123 456 789)",
+          hintText: 'Phone ((+84) 123 456 789)',
           fillColor: Colors.black12,
           filled: true,
           labelStyle: const TextStyle(color: Colors.blue),
@@ -266,7 +272,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
 
   Widget _buildPasswordTextField(TextEditingController controller) {
     return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10),
+      margin: const EdgeInsets.only(left: AppMargin.m10, right: AppMargin.m10),
       child: TextField(
         maxLines: 1,
         controller: controller,
@@ -299,21 +305,21 @@ class _SignUpContainerState extends State<SignUpContainer> {
         child: ElevatedButtonTheme(
             data: ElevatedButtonThemeData(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith((states) {
-                    if (states.contains(MaterialState.pressed)) {
-                      return Colors.blue[500];
-                    } else if (states.contains(MaterialState.disabled)) {
-                      return Colors.grey;
-                    }
-                    return Colors.blueAccent;
-                  }),
-                  elevation: MaterialStateProperty.all(5),
-                  padding: MaterialStateProperty.all(
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 100)),
-                )),
+              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.pressed)) {
+                  return Colors.blue[500];
+                } else if (states.contains(MaterialState.disabled)) {
+                  return Colors.grey;
+                }
+                return Colors.blueAccent;
+              }),
+              elevation: MaterialStateProperty.all(5),
+              padding: MaterialStateProperty.all(
+                  const EdgeInsets.symmetric(vertical: 5, horizontal: 100)),
+            )),
             child: ElevatedButton(
               onPressed: function,
-              child: const Text("Register",
+              child: const Text(AppStrings.register,
                   style: TextStyle(fontSize: 18, color: Colors.white)),
             )));
   }

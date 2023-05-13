@@ -1,14 +1,15 @@
 import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_order_food_nvchung/data/datasources/remote/dio_client.dart';
-import '../../common/bases/base_repository.dart';
-import '../../common/constants/api_constant.dart';
-class CartRepository extends BaseRepository{
-  late Dio _dio;
 
+import '../../common/bases/base_repository.dart';
+
+class CartRepository extends BaseRepository {
   CartRepository() {
     _dio = DioClient.instance.dio;
   }
+  late Dio _dio;
   Future getCart() {
     return apiRequest.getCart();
   }
@@ -17,11 +18,17 @@ class CartRepository extends BaseRepository{
     // ApiRequest apiRequest =ApiRequest();
     return apiRequest.addCart(idProduct);
   }
-  Future updateCart(String idCart, int quantity,String  idProduct){
+
+  Future updateCart(String idCart, int quantity, String idProduct) {
     return apiRequest.updateCart(idCart, quantity, idProduct);
   }
-Future  confirmCart(String idCart,) {
-    return apiRequest.confirmCard(idCart, );
+
+  Future confirmCart(
+    String idCart,
+  ) {
+    return apiRequest.confirmCard(
+      idCart,
+    );
   }
 
   // Future<String> oldConfirm(String idCart) {

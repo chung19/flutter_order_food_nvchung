@@ -5,9 +5,10 @@ import 'package:provider/single_child_widget.dart';
 class PageContainer extends StatelessWidget {
   final Widget child;
   final List<SingleChildWidget> providers;
-  AppBar? appBar;
+  final AppBar? appBar;
 
-  PageContainer({required this.child, required this.providers, this.appBar});
+  PageContainer(
+      {super.key, required this.child, required this.providers, this.appBar});
 
   @override
   Widget build(BuildContext context) {

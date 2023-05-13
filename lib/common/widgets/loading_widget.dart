@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+
 import '../bases/base_bloc.dart';
 
 class LoadingWidget extends StatelessWidget {
@@ -8,6 +9,7 @@ class LoadingWidget extends StatelessWidget {
   final BaseBloc bloc;
 
   LoadingWidget({
+    super.key,
     required this.child,
     required this.bloc,
   });

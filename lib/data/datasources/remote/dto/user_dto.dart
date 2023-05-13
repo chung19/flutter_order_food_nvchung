@@ -1,34 +1,36 @@
 class UserDto {
-  UserDto({
+  const UserDto({
     this.email,
     this.name,
     this.phone,
     this.userGroup,
     this.registerDate,
     this.token,
-    this.address
+    this.address,
   });
 
-  UserDto.fromJson(dynamic json) {
-    email = json['email'];
-    name = json['name'];
-    phone = json['phone'];
-    userGroup = json['userGroup'];
-    registerDate = json['registerDate'];
-    token = json['token'];
-    address = json['address'];
+  factory UserDto.fromJson(Map<String, dynamic> json) {
+    return UserDto(
+      email: json['email'],
+      name: json['name'],
+      phone: json['phone'],
+      userGroup: json['userGroup'],
+      registerDate: json['registerDate'],
+      token: json['token'],
+      address: json['address'],
+    );
   }
 
-  String? email;
-  String? name;
-  String? phone;
-  int? userGroup;
-  String? registerDate;
-  String? token;
-  String? address;
+  final String? email;
+  final String? name;
+  final String? phone;
+  final int? userGroup;
+  final String? registerDate;
+  final String? token;
+  final String? address;
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
+    final Map<String, dynamic> map = <String, dynamic>{};
     map['email'] = email;
     map['name'] = name;
     map['phone'] = phone;
@@ -40,4 +42,9 @@ class UserDto {
   }
 
   static UserDto convertJson(dynamic json) => UserDto.fromJson(json);
+
+  @override
+  String toString() {
+    return 'UserDto{email: $email, name: $name, phone: $phone, userGroup: $userGroup, registerDate: $registerDate, token: $token, address: $address}';
+  }
 }

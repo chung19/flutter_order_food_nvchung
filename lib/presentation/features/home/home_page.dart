@@ -1,18 +1,11 @@
-
-import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_order_food_nvchung/common/bases/base_widget.dart';
-import 'package:flutter_order_food_nvchung/data/model/product.dart';
-import 'package:flutter_order_food_nvchung/data/repositories/cart_repository.dart';
-import 'package:flutter_order_food_nvchung/data/repositories/product_repository.dart';
-import 'package:flutter_order_food_nvchung/presentation/features/home/home_bloc.dart';
-import 'package:flutter_order_food_nvchung/presentation/features/home/home_event.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../common/bases/base_widget.dart';
 import '../../../common/constants/api_constant.dart';
 import '../../../common/constants/style_constant.dart';
 import '../../../common/constants/variable_constant.dart';
@@ -20,12 +13,18 @@ import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../data/datasources/remote/api_request.dart';
 import '../../../data/model/cart.dart';
+import '../../../data/model/product.dart';
+import '../../../data/repositories/cart_repository.dart';
+import '../../../data/repositories/product_repository.dart';
 import '../../plugin/slider_banner.dart';
+import '../../resources/assets-manager.dart';
+import '../../resources/strings_manager.dart';
 import 'child_home_widget/button_base.dart';
+import 'home_bloc.dart';
+import 'home_event.dart';
 
 class HomePage extends StatefulWidget {
-
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -33,53 +32,59 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var gallery = ApiConstant.baseUrl;
+  late ScrollController _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
   Future<void> handleButtonSignOut() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    showDialog(
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    return showDialog(
         context: context,
-        builder: (_)
-    {
-      return AlertDialog(
-        actions: [
-          Row(
-
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    "Cancel",
-                    style: TextStyle(color: Colors.grey[400], fontSize: 16),
-                  )),
-              TextButton(
-                onPressed: () {
-                  preferences.clear();
-                  print('log out ');
-                  // Navigator.pushNamed(context, "/sign_in");
-
-                  Navigator.pushReplacementNamed(
-                      context, VariableConstant.signInRoute);
-                },
-                child: Container(
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 5,
+        builder: (_) {
+          return AlertDialog(
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(
+                        AppStrings.cancel,
+                        style: TextStyle(color: Colors.grey[400], fontSize: 16),
+                      )),
+                  TextButton(
+                    onPressed: () {
+                      preferences.clear();
+                      preferences.setBool('firstRun', false);
+                      print(AppStrings.logout);
+                      Navigator.pushReplacementNamed(
+                          context, VariableConstant.signInRoute);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 5,
+                      ),
+                      padding: const EdgeInsets.fromLTRB(8, 10, 4, 10),
+                      decoration: const BoxDecoration(
+                          color: Color(0xFFF10808),
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                      child: Text(
+                        AppStrings.quit,
+                        style: GoogleFonts.antonio(
+                          color: const Color(0xFFF1F5F1),
+                        ),
+                      ),
+                    ),
                   ),
-                  padding: const EdgeInsets.fromLTRB(8, 10, 4, 10),
-                  decoration: const BoxDecoration(
-                      color: Color(0xFFF10808),
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(30))),
-                  child: Text(" Do You Want Quit Now ! ", style: GoogleFonts.antonio(
-                    color: const Color(0xFFF1F5F1),
-                  ),),
-                ),),
+                ],
+              ),
             ],
-          ),
-        ],
-
-
-      );
-    });
+          );
+        });
   }
 
   @override
@@ -87,27 +92,34 @@ class _HomePageState extends State<HomePage> {
     return PageContainer(
       appBar: AppBar(
         backgroundColor: const Color(0xFF1ebd60),
-        title: const Center(child: Text("Home")),
+        title: const Center(
+          child: Text('Home'),
+        ),
         leading: IconButton(
-          icon: Image.asset("assets/images/boy.png",height:50,fit: BoxFit.fill,),
+          icon: Image.asset(
+            ImageAssets.avatar,
+            height: 50,
+            fit: BoxFit.fill,
+          ),
           onPressed: () {
-            setState(() {
-              handleButtonSignOut();
-            },);
-
+            setState(
+              () {
+                handleButtonSignOut();
+              },
+            );
           },
         ),
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, "/order");
+                Navigator.pushNamed(context, '/order');
               },
               icon: const Icon(Icons.history)),
           Consumer<HomeBloc>(
             builder: (context, bloc, child) {
               return InkWell(
                 onTap: () {
-                  Navigator.pushNamed(context, "/cart").then((cartModelUpdate) {
+                  Navigator.pushNamed(context, '/cart').then((cartModelUpdate) {
                     if (cartModelUpdate != null) {
                       bloc.cartController.sink.add(cartModelUpdate as Cart);
                     }
@@ -118,20 +130,20 @@ class _HomePageState extends State<HomePage> {
                     stream: bloc.cartController.stream,
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
-                        return Container();
+                        return const SizedBox.shrink();
                       }
-                      String? count =
+                      final String? count =
                           snapshot.data?.products?.length.toString();
-                      if (count == null || count.isEmpty || count == "0") {
+                      if (count == null || count.isEmpty || count == '0') {
                         return Container(
                           margin: const EdgeInsets.only(right: 10, top: 10),
                           child: const Icon(Icons.shopping_cart_outlined),
                         );
                       } else {
                         return Container(
-                          margin: const EdgeInsets.only(right: 10, top: 10),
+                          margin: const EdgeInsets.only(right: 10, top: 18),
                           child: Badge(
-                            badgeContent: Text(count),
+                            label: Text(count),
                             child: const Icon(Icons.shopping_cart_outlined),
                           ),
                         );
@@ -141,7 +153,6 @@ class _HomePageState extends State<HomePage> {
             },
           )
         ],
-
       ),
       providers: [
         Provider(create: (context) => ApiRequest()),
@@ -169,15 +180,14 @@ class _HomePageState extends State<HomePage> {
 }
 
 class HomeContainer extends StatefulWidget {
-  const HomeContainer({Key? key}) : super(key: key);
-
+  const HomeContainer({super.key});
   @override
   State<HomeContainer> createState() => _HomeContainerState();
 }
 
 class _HomeContainerState extends State<HomeContainer> {
+  late ScrollController _scrollController;
   late HomeBloc _homeBloc;
-
 
   @override
   void initState() {
@@ -185,15 +195,15 @@ class _HomeContainerState extends State<HomeContainer> {
     _homeBloc = context.read<HomeBloc>();
     _homeBloc.eventSink.add(GetListProductEvent());
     _homeBloc.eventSink.add(FetchCartEvent());
+    _scrollController = ScrollController();
     SchedulerBinding.instance.addPostFrameCallback(
       (_) {
         _homeBloc.messageStream.listen((event) {
-          showMessage(context, "Thông Báo", event);
+          showMessage(context, AppStrings.notify, event);
         });
       },
     );
   }
-
 
   void addCart(String idProduct) {
     _homeBloc.eventSink.add(AddCartEvent(idProduct: idProduct));
@@ -205,36 +215,41 @@ class _HomeContainerState extends State<HomeContainer> {
         builder: (_) {
           return AlertDialog(
             actions: [
-            Row(
-
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: const Text(
-                        "Cancel",
+                        AppStrings.cancel,
                         style: handleButtonDetailCanelTextStyle,
                       )),
                   TextButton(
-                      onPressed: () {
-                          handleButtonDetail(product, context);
-
-                      },
-                      child:    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                        vertical: 5,
-                                      ),
-                                      padding: const EdgeInsets.fromLTRB(8, 10, 4,10),
-                                      decoration: const BoxDecoration(
-                                          color: Color(0xFF0783EC),
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(30))),
-                                      child: Text("Buy Now ",style:GoogleFonts.antonio(
-                                      color: const Color(0xFFF1F5F1),
-                                    ) ,),
-                                  ),),
-              ],
-            ),
+                    onPressed: () {
+                      handleButtonDetail(product, context);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 5,
+                      ),
+                      padding: const EdgeInsets.fromLTRB(4, 5, 2, 5),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFA22617),
+                        border: Border.all(
+                          color: Colors.purple,
+                          width: 2,
+                        ),
+                      ),
+                      child: const Text(AppStrings.buy,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w200,
+                          )),
+                    ),
+                  ),
+                ],
+              ),
             ],
             title: Text(
               product.name,
@@ -242,31 +257,28 @@ class _HomeContainerState extends State<HomeContainer> {
               style: GoogleFonts.chewy(
                 fontSize: 24,
                 color: const Color(0xFFA22617),
-                textStyle:
-                Theme.of(context).textTheme.displayLarge,
+                textStyle: Theme.of(context).textTheme.displayLarge,
               ),
             ),
             content: SizedBox(
               width: double.maxFinite,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
                   Container(
                     margin: const EdgeInsets.only(top: 10),
                   ),
                   CarouselSlider(
                     items: product.gallery
                         .map((e) => Center(
-                            child: ClipRRect(
+                                child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.network(
-                          "https://serverappsale.onrender.com/$e",
-                          fit: BoxFit.cover,
-                          width: 1000,
-                        ),
+                                '${ApiConstant.baseUrl}$e',
+                                fit: BoxFit.cover,
+                                width: 1000,
+                              ),
                             )))
                         .toList(),
                     options: CarouselOptions(
@@ -278,29 +290,36 @@ class _HomeContainerState extends State<HomeContainer> {
                       reverse: false,
                       autoPlay: true,
                       autoPlayInterval: const Duration(seconds: 3),
-                      autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 800),
                       autoPlayCurve: Curves.fastOutSlowIn,
                       enlargeCenterPage: true,
                       scrollDirection: Axis.horizontal,
                     ),
                   ),
-            const SizedBox(height: 10,),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Container(
+                    alignment: Alignment.center,
                     margin: const EdgeInsets.symmetric(
-                      vertical: 5,
+                      vertical: 10,
+                      horizontal: 15,
                     ),
-                    padding: const EdgeInsets.fromLTRB(14, 2, 14, 2),
-                    decoration: const BoxDecoration(
-                        color: Colors.teal,
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(50))),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.purple,
+                        width: 2,
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(2),
                     child: Text(
-                      "Price : ${NumberFormat("#,###", "en_US").format(product.price)} đ",
+                      "\$ : ${NumberFormat("#,###", "en_US").format(product.price)} VND",
                       style: GoogleFonts.amita(
                         fontSize: 20,
-                        color: const Color(0xFFEFF5EF),
-                        textStyle:
-                        Theme.of(context).textTheme.displaySmall,
+                        color: const Color(0xFFB41CD1),
+                        fontWeight: FontWeight.w900,
+                        textStyle: Theme.of(context).textTheme.displaySmall,
                       ),
                     ),
                   ),
@@ -308,19 +327,17 @@ class _HomeContainerState extends State<HomeContainer> {
                     margin: const EdgeInsets.symmetric(
                       vertical: 5,
                     ),
-                    padding: const EdgeInsets.fromLTRB(23.8, 2, 23.8,2),
+                    padding: const EdgeInsets.fromLTRB(23.8, 2, 23.8, 2),
                     decoration: const BoxDecoration(
                         color: Color(0xFFC91A1A),
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(30))),
+                        borderRadius: BorderRadius.all(Radius.circular(30))),
                     child: Text(
                       'Quantity : 99+',
                       maxLines: 1,
                       style: GoogleFonts.amita(
                         fontSize: 20,
                         color: const Color(0xFFEFF5EF),
-                        textStyle:
-                        Theme.of(context).textTheme.displaySmall,
+                        textStyle: Theme.of(context).textTheme.displaySmall,
                       ),
                     ),
                   ),
@@ -336,96 +353,90 @@ class _HomeContainerState extends State<HomeContainer> {
     // Size size = MediaQuery.of(context).size;
     return SafeArea(
         child: Container(
-        
       child: Stack(
         children: [
-          ListView(
-              children: [
-                         const SliderBanner(),
-                StreamBuilder<List<Product>>(
-                    initialData: const [],
-                    stream: _homeBloc.listProductController.stream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Stack(
-                          children: [
-                            Image.asset(
-                              "assets/images/opps.png",
+          ListView(children: [
+            const SliderBanner(),
+            StreamBuilder<List<Product>>(
+                initialData: const [],
+                stream: _homeBloc.listProductController.stream,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Stack(
+                      children: [
+                        Image.asset(
+                          ImageAssets.Opps,
+                        ),
+                        const Center(
+                          child: Text(
+                            'Product is Err!',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF91FF52),
                             ),
-                            const Center(
-                              child: Text(
-                                'Product is Err!',
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF91FF52),
-                                ),
-                              ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  if (snapshot.hasData && snapshot.data == []) {
+                    return Column(
+                      children: [
+                        Image.asset(
+                          ImageAssets.EmptyCart,
+                        ),
+                        const Center(
+                          child: Text(
+                            'Product Empty!',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF91FF52),
                             ),
-                          ],
-                        );
-                      }
-                      if (snapshot.hasData && snapshot.data == []) {
-                        return Column(
-                          children: [
-                            Image.asset(
-                              "assets/images/empty_cart.png",
-                            ),
-                            const Center(
-                              child: Text(
-                                'Product Empty!',
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF91FF52),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }
+                          ),
+                        ),
+                      ],
+                    );
+                  }
 
-                      return GridView.builder(
-
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
-                      childAspectRatio: 0.9,),
-                          itemCount: snapshot.data?.length ,
-                          itemBuilder: (context, index) {
-                            return _buildItemFood(snapshot.data?[index]);
-
-                          });
-                    }),
-
-              ]),
+                  return GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 10.0,
+                        crossAxisSpacing: 10.0,
+                        childAspectRatio: 0.9,
+                      ),
+                      itemCount: snapshot.data?.length,
+                      itemBuilder: (context, index) {
+                        return _buildItemFood(snapshot.data?[index]);
+                      });
+                }),
+          ]),
           LoadingWidget(
             bloc: _homeBloc,
             child: Container(),
           )
         ],
-
       ),
     ));
   }
 
   Widget _buildItemFood(Product? product) {
-    if (product == null) return Container();
+    if (product == null) {
+      return const SizedBox.shrink();
+    }
     return SizedBox(
-
       child: Card(
         elevation: 5,
-         shadowColor: Colors.blueGrey,
+        shadowColor: Colors.blueGrey,
         child: Container(
-
           padding: const EdgeInsets.only(top: 5, bottom: 5),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
             children: [
-
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Image.network(
@@ -443,54 +454,82 @@ class _HomeContainerState extends State<HomeContainer> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 5),
-                        child: Text(product.name.toString(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 16)),
-                      ),
-                      Text(
-                        "Giá : ${NumberFormat("#,###", "en_US").format(product.price)} đ",
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                      Row(mainAxisSize: MainAxisSize.min, children: [
-                        MyCustomButton(
-                          onPressed: () {
-                            _homeBloc.eventSink
-                                .add(AddCartEvent(idProduct: product.id));
-                          },// Nội dung của button
-                          backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
-
-                            if (states.contains(MaterialState.pressed)) {
-                              return const Color.fromARGB(
-                                  188, 157, 201, 10);
-                            }
-                            return const Color.fromARGB(
-                                230, 240, 102, 61);
-                          }),
-                          child: const Text("thêm vào giỏ",
-                              style: TextStyle(fontSize: 10)),
+                        child: Text(
+                          product.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
                         ),
-                     const SizedBox(width: 2,),
-          MyCustomButton(
-            onPressed: () {
-              setState(() {
-                handleButtonDetail(product, context);
-              },);
+                      ),
+                      Center(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.purple,
+                              width: 2,
+                            ),
+                          ),
+                          child: Text(
+                            '\$: ${NumberFormat("#,###", "en_US").format(product.price)} VND',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.purple,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          MyCustomButton(
+                            onPressed: () {
+                              _homeBloc.eventSink
+                                  .add(AddCartEvent(idProduct: product.id));
+                            }, // Nội dung của button
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color?>(
+                                    (states) {
+                              if (states.contains(MaterialState.pressed)) {
+                                return const Color.fromARGB(188, 157, 201, 10);
+                              }
+                              return const Color.fromARGB(230, 240, 102, 61);
+                            }),
+                            child: const Text(AppStrings.addCart,
+                                style: TextStyle(fontSize: 10)),
+                          ),
+                          const SizedBox(
+                            width: 2,
+                          ),
+                          MyCustomButton(
+                            onPressed: () {
+                              setState(
+                                () {
+                                  handleButtonDetail(product, context);
+                                },
+                              );
+                            }, // Nội dung của button
+                            backgroundColor:
+                                MaterialStateProperty.resolveWith<Color?>(
+                                    (states) {
+                              if (states.contains(MaterialState.pressed)) {
+                                return const Color.fromARGB(230, 11, 22, 142);
+                              }
+                              return const Color.fromARGB(200, 11, 22, 142);
 
-            },// Nội dung của button
-            backgroundColor: MaterialStateProperty.resolveWith<Color?>((states) {
-
-              if (states.contains(MaterialState.pressed)) {
-                return const Color.fromARGB(
-                    230, 11, 22, 142);
-              }
-              return const Color.fromARGB(
-                  200, 11, 22, 142); /// Màu sắc mặc định
-            }),
-            child: const Text("Chi tiết",style: TextStyle(fontSize: 10),
-
-          ),
-          ) ]),
+                              /// Màu sắc mặc định
+                            }),
+                            child: const Text(
+                              AppStrings.detail,
+                              style: TextStyle(fontSize: 10),
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -501,6 +540,4 @@ class _HomeContainerState extends State<HomeContainer> {
       ),
     );
   }
-
-
 }

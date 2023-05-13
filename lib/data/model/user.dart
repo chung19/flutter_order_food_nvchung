@@ -1,10 +1,4 @@
 class User {
-  late String email;
-  late String name;
-  late String phone;
-  late String registerDate;
-  late String token;
-  late String address;
 
   User([String? email, String? name, String? phone, String? registerDate, String? token, String? address]) {
     this.email = email ?? "";
@@ -14,6 +8,12 @@ class User {
     this.token = token ?? "";
     this.address = address ?? "";
   }
+  late String email;
+  late String name;
+  late String phone;
+  late String registerDate;
+  late String token;
+  late String address;
 
   @override
   String toString() {

@@ -1,66 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_order_food_nvchung/data/datasources/local/cache/app_cache.dart';
-import 'package:is_first_run/is_first_run.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../common/constants/variable_constant.dart';
+import '../../../data/datasources/local/cache/app_cache.dart';
+import '../../resources/assets-manager.dart';
+import '../../resources/strings_manager.dart';
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
-
+  const SplashPage({super.key});
   @override
   State<SplashPage> createState() => _SplashPageState();
 }
-
 class _SplashPageState extends State<SplashPage> {
-
   @override
-  Future<void> didChangeDependencies() async {
-    super.didChangeDependencies();
-    bool firstRun = await IsFirstRun.isFirstRun();
-    Future.delayed ( const Duration (seconds: 2 )
-    , () {
-
-    String token = AppCache.getString(VariableConstant.token);
-    if(firstRun==true)
-      { Navigator.pushReplacementNamed(context, VariableConstant.introRoute);}
-   else if (token.isNotEmpty) {
-    Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
-    }
-    else {
-    Navigator.pushReplacementNamed(context, VariableConstant.signInRoute);
-    }
-    });
-
-
+  void initState() {
+    super.initState();
+    _checkFirstRun(context);
   }
+
+  Future<void> _checkFirstRun(BuildContext context) async {
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+        // Future.delayed(Duration(seconds: 2), (){
+     bool firstRun = prefs.getBool('firstRun') ?? true;
+     String token = AppCache.getString(VariableConstant.token);
+      if (firstRun && context.mounted) {
+        prefs.setBool('firstRun', false);
+        Navigator.pushReplacementNamed(context, VariableConstant.introRoute);
+      } else if (token.isNotEmpty) {
+        Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
+      } else {
+        Navigator.pushReplacementNamed(context, VariableConstant.signInRoute);
+      }
+    // });
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       color: const Color(0xFF50baff),
       width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: SingleChildScrollView(
-            child: Column(
-             mainAxisAlignment: MainAxisAlignment.start,
-               // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 150),
-                  child: Lottie.asset('assets/animations/33591-cooker.json',
-                      animate: true, repeat: true),
+      height: MediaQuery.of(context).size.height,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [ 
+            Container(
+              margin: const EdgeInsets.only(top: 150),
+              child: Lottie.asset(
+                ImageAssets.animations33591cooker,
+                animate: true,
+                repeat: true,
+              ),
+            ),
+            Column(
+              children: const [
+                Text(
+                  AppStrings.appName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 50,
+                    color: Colors.white,
+                  ),
                 ),
-                Column(
-                  children: const [
-                    Text("Foodo",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 50,
-                            color: Colors.white,),),
-                  ],
-                )
               ],
             ),
-          ),
+          ],
+        ),
+      ),
     );
   }
 }

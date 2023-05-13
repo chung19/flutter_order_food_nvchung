@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_order_food_nvchung/common/bases/base_bloc.dart';
 import 'package:flutter_order_food_nvchung/common/bases/base_event.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_order_food_nvchung/data/datasources/remote/dto/order_dto
 import 'package:flutter_order_food_nvchung/data/datasources/remote/dto/product_dto.dart';
 import 'package:flutter_order_food_nvchung/data/repositories/order_repository.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/order/order_event.dart';
+
 import '../../../data/datasources/remote/app_response.dart';
 import '../../../data/model/order.dart';
 import '../../../data/model/product.dart';
@@ -25,41 +27,6 @@ class OrderBloc extends BaseBloc {
       case FetchOrderEvent:
         oldFetchOrder(event as FetchOrderEvent);
         break;
-    }
-  }
-  void fetchOrderBase(FetchOrderEvent event) async {
-    final data = await handleResponse<OrderDto>(
-        _orderRepository.getOrder(), OrderDto.convertJson);
-    if (data != null) {
-      List<Order> orders = [Order(
-          data.id,
-          data.products?.map((dto) {
-            return Product(dto.id, dto.name, dto.address, dto.price, dto.img,
-                dto.quantity, dto.gallery);
-          }).toList(),
-          data?.img,
-          data?.price,
-          data?.status,
-          data?.date_created)];
-      orderController.sink.add(orders);
-    }
-  }
-
-  void fetchOrderBases(FetchOrderEvent event) async {
-    final data = await handleResponse<OrderDto>(
-        _orderRepository.getOrder(), OrderDto.convertJson);
-    if (data != null) {
-      Order order = Order(
-          data.id,
-          data.products?.map((dto) {
-            return Product(dto.id, dto.name, dto.address, dto.price, dto.img,
-                dto.quantity, dto.gallery);
-          }).toList(),
-          data?.img,
-          data?.price,
-          data?.status,
-          data?.date_created);
-      // orderController.sink.add();
     }
   }
 
@@ -86,7 +53,6 @@ class OrderBloc extends BaseBloc {
       // orderListsData.data?.status ,
       // orderListsData.data?.date_created
       //   ) );
-
     } on DioError catch (e) {
       orderController.sink.addError(e.response?.data["message"]);
       messageSink.add(e.response?.data["message"]);
@@ -95,7 +61,6 @@ class OrderBloc extends BaseBloc {
     }
     loadingSink.add(false);
   }
-
 
   void oldFetchOrder(FetchOrderEvent event) {
     loadingSink.add(true);
@@ -116,7 +81,7 @@ class OrderBloc extends BaseBloc {
             order.img,
             order.price,
             order.status,
-            order.date_created);
+            order.dateCreated);
       }).toList());
     }).catchError((e) {
       messageOderController.sink.add(e);

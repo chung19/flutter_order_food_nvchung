@@ -21,20 +21,22 @@ class ProgressListenerWidget<T extends BaseBloc> extends StatefulWidget {
 }
 
 class _ProgressListenerWidgetState<T> extends State<ProgressListenerWidget> {
-  late Stream<BaseEvent> _stream;
-
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
     var bloc = context.read<T>() as BaseBloc;
-    _stream = bloc.progressStream;
+    bloc.progressStream.listen(
+      (event) {
+        widget.callback(event);
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<BaseEvent?>.value(
-      value: _stream,
+    return StreamProvider<BaseEvent?>(
+      create: (_) => (context.read<T>() as BaseBloc).progressStream,
       initialData: null,
       updateShouldNotify: (prev, current) {
         return true;
@@ -49,4 +51,3 @@ class _ProgressListenerWidgetState<T> extends State<ProgressListenerWidget> {
     );
   }
 }
-
