@@ -1,12 +1,23 @@
 import 'dart:async';
+
 import 'package:rxdart/rxdart.dart';
+
 import 'base_event.dart';
 
 abstract class BaseBloc {
-  final StreamController<BaseEvent> _eventStreamController = StreamController();
-  final StreamController<bool> _loadingController = StreamController.broadcast();
-  final StreamController<BaseEvent> _progressController = BehaviorSubject();
-  final StreamController<String> _messageController = BehaviorSubject();
+  BaseBloc() {
+    _eventStreamController.stream.listen((BaseEvent event) {
+      dispatch(event);
+    });
+  }
+
+  final StreamController<BaseEvent> _eventStreamController =
+      StreamController<BaseEvent>();
+  final StreamController<bool> _loadingController =
+      StreamController<bool>.broadcast();
+  final StreamController<BaseEvent> _progressController =
+      BehaviorSubject<BaseEvent>();
+  final StreamController<String> _messageController = BehaviorSubject<String>();
 
   Stream<String> get messageStream => _messageController.stream;
   Sink<String> get messageSink => _messageController.sink;
@@ -16,17 +27,14 @@ abstract class BaseBloc {
   Stream<bool> get loadingStream => _loadingController.stream;
   Sink<bool> get loadingSink => _loadingController.sink;
 
-  BaseBloc(){
-    _eventStreamController.stream.listen((event) {
-      dispatch(event);
-    });
-  }
-
   void dispatch(BaseEvent event);
 
   void dispose() {
     _eventStreamController.close();
+    loadingSink.close();
     _loadingController.close();
     _progressController.close();
+    _messageController.close();
+    messageSink.close();
   }
 }

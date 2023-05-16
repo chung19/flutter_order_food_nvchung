@@ -4,9 +4,11 @@ import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/constants/variable_constant.dart';
+import '../resources/assets-manager.dart';
+import '../resources/strings_manager.dart';
 
 class Intro extends StatefulWidget {
-  const Intro({Key? key}) : super(key: key);
+  const Intro({super.key});
   @override
   State<Intro> createState() => _IntroState();
 }
@@ -15,9 +17,9 @@ class _IntroState extends State<Intro> {
   List<PageViewModel> getPages() {
     return [
       PageViewModel(
-          image: Image.asset("assets/images/FooD.jpg",width: double.infinity,fit: BoxFit.fill,),
-          title: "Welcome to Food Paradise" ,
-          body: ("Here we provide delicious dishes from fresh foods "),
+          image: Image.asset(ImageAssets.FooD,width: double.infinity,fit: BoxFit.fill,),
+          title: AppStrings.titleIntro1 ,
+          body: AppStrings.bodyIntro1,
           decoration:  PageDecoration(
             pageColor: Colors.white,
             titleTextStyle:   GoogleFonts.chewy(
@@ -27,23 +29,25 @@ class _IntroState extends State<Intro> {
             Theme.of(context).textTheme.displayLarge,
           ),
             bodyTextStyle:   GoogleFonts.chewy(
-            fontSize: 24,
+            fontSize: 20,
             color: const Color(0xFF882820),
             textStyle:
             Theme.of(context).textTheme.displayLarge,
           ),
           )),
       PageViewModel(
-        image: Image.asset("assets/images/offer.png",width: double.infinity,fit: BoxFit.fill,),
-        title: "Cheap tasty tonic ",
-        body: "As our store selection criteria",
-        footer:  Text(
-          'Let is Experience Together',
-          style: GoogleFonts.chewy(
-            fontSize: 20,
-            color: const Color(0xFF56221E),
-            textStyle:
-            Theme.of(context).textTheme.displaySmall,
+        image: Image.asset(ImageAssets.Offer,width: double.infinity,fit: BoxFit.fill,),
+        title: AppStrings.titleIntro2,
+        body: AppStrings.bodyIntro2,
+        footer:  Center(
+          child: Text(
+            AppStrings.footerIntro2,
+            style: GoogleFonts.chewy(
+              fontSize: 20,
+              color: const Color(0xFF56221E),
+              textStyle:
+              Theme.of(context).textTheme.displaySmall,
+            ),
           ),
         ),
         decoration:  PageDecoration(
@@ -65,17 +69,19 @@ class _IntroState extends State<Intro> {
         ),
       ),
       PageViewModel(
-        image: Image.asset("assets/images/delivery.png",width: double.infinity,fit: BoxFit.fill,),
-        title: "Fast",
-        body: "Convenience",
-        footer:  Text(
-          'Easy 1-touch payment ',
-          style: GoogleFonts.chewy(
-    fontSize: 20,
+        image: Image.asset(ImageAssets.Delivery,width: double.infinity,fit: BoxFit.fill,),
+        title: AppStrings.titleIntro3,
+        body: AppStrings.bodyIntro3,
+        footer:  Center(
+          child: Text(
+            AppStrings.footerIntro3,
+            style: GoogleFonts.chewy(
+    fontSize: 24,
     color: const Color(0xFF56221E),
     textStyle:
     Theme.of(context).textTheme.displaySmall,
     ),
+          ),
         ),
         decoration:  PageDecoration(
           pageColor: Colors.white,
@@ -95,18 +101,20 @@ class _IntroState extends State<Intro> {
         ),
       ),
       PageViewModel(
-          image: Image.asset("assets/images/cook.png",width: double.infinity,fit: BoxFit.fill,),
-          title: "Happy Food ",
-          body: "Touch is suck",
-          footer:  Text(
-          'Eat now',
-            style: GoogleFonts.chewy(
-              fontSize: 20,
-              color: const Color(0xFF56221E),
-              textStyle:
-              Theme.of(context).textTheme.displaySmall,
-            ),
+          image: Image.asset(ImageAssets.Cook,width: double.infinity,fit: BoxFit.fill,),
+          title: AppStrings.titleIntro4,
+          body: AppStrings.bodyIntro4,
+          footer:  Center(
+            child: Text(
+    AppStrings.footerIntro4,
+              style: GoogleFonts.chewy(
+                fontSize: 20,
+                color: const Color(0xFF56221E),
+                textStyle:
+                Theme.of(context).textTheme.displaySmall,
+              ),
         ),
+          ),
         decoration: PageDecoration(
           pageColor: Colors.white,
           titleTextStyle:   GoogleFonts.alice(
@@ -145,8 +153,8 @@ class _IntroState extends State<Intro> {
                 color: Color(0xFFC91A1A),
                 borderRadius:
                 BorderRadius.all(Radius.circular(30))),
-            child:  Text("Skip",style: GoogleFonts.atomicAge(
-              color: Color(0xFFF3F6F3),
+            child:  Text('Skip',style: GoogleFonts.atomicAge(
+              color: const Color(0xFFF3F6F3),
             ),
             ),
 
@@ -161,8 +169,8 @@ class _IntroState extends State<Intro> {
               borderRadius:
               BorderRadius.all(Radius.circular(30))),
 
-          child: Text(" Next",style: GoogleFonts.atomicAge(
-          color: Color(0xFFFFFFFF),
+          child: Text(' Next',style: GoogleFonts.atomicAge(
+          color: const Color(0xFFFFFFFF),
           ),),
         ),
         done: TextButton(
@@ -184,8 +192,8 @@ class _IntroState extends State<Intro> {
                     color: Color(0xFF1B7CCC),
                     borderRadius:
                     BorderRadius.all(Radius.circular(30))),
-                child: Text("Got it ",style:GoogleFonts.atomicAge(
-                color: Color(0xFFF1F5F1),
+                child: Text('Got it ',style:GoogleFonts.atomicAge(
+                color: const Color(0xFFF1F5F1),
               ) ,),
             ),),
         onDone: () {},

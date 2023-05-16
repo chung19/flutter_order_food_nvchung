@@ -1,2 +1,3 @@
 import 'package:equatable/equatable.dart';
-abstract class BaseEvent extends Equatable{}
+
+abstract class BaseEvent extends Equatable {}

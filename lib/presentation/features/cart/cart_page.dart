@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 import '../../../common/bases/base_widget.dart';
 import '../../../common/constants/api_constant.dart';
 import '../../../common/constants/variable_constant.dart';
@@ -110,7 +112,6 @@ class _CartContainerState extends State<CartContainer> {
                           ),
                         ),
                       ),
-
                     ],
                   );
                 }
@@ -135,13 +136,13 @@ class _CartContainerState extends State<CartContainer> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 10),
                       padding: const EdgeInsets.all(10),
-                      child:  ElevatedButton(
+                      child: ElevatedButton(
                         onPressed: () {
                           showDialog(
                               context: context,
                               builder: (_) {
                                 return AlertDialog(
-                                  title: Text(
+                                  title: const Text(
                                     "Đặt hàng?",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -153,8 +154,7 @@ class _CartContainerState extends State<CartContainer> {
                                       "Quý khách sẽ thanh toán ${NumberFormat("#,###", "en_US").format(_cart?.price)} đồng cho các món ăn trên"),
                                   actions: [
                                     TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(context),
+                                        onPressed: () => Navigator.pop(context),
                                         child: Text(
                                           "Hủy",
                                           style: TextStyle(
@@ -168,7 +168,7 @@ class _CartContainerState extends State<CartContainer> {
                                             _bloc.eventSink.add(CartConform(
                                               idCart: idCart,
                                             ));
-                                             print('p');
+                                            print('p');
                                             Navigator.pop(context);
                                           }
                                         },
@@ -181,26 +181,27 @@ class _CartContainerState extends State<CartContainer> {
                                 );
                               });
                         },
-                        child: Text(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+                          minimumSize: const Size.fromHeight(50),
+                        ),
+                        child: const Text(
                           "Thanh toán",
                           style: TextStyle(fontSize: 16),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Color.fromARGB(255, 255, 0, 0),
-                          minimumSize: const Size.fromHeight(50),
                         ),
                       ),
                     ),
                     ProgressListenerWidget<CartBloc>(
                       callback: (event) {
                         if (event is CartConFormSuccessEvent) {
-                          Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
+                          Navigator.pushReplacementNamed(
+                              context, VariableConstant.homeRoute);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(event.message)));
                         }
                       },
                       child: Container(),
                     ),
-
                   ],
                 );
               }
@@ -241,21 +242,32 @@ class _CartContainerState extends State<CartContainer> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: Text((product?.name).toString(),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontSize: 16)),
+                      Center(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 5,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.purple,
+                              width: 2,
+                            ),
+                          ),
+                          padding: const EdgeInsets.all(2),
+                          child: Text(
+                            "\$ : ${NumberFormat("#,###", "en_US").format(product?.price)} VND",
+                            style: GoogleFonts.amita(
+                              fontSize: 16,
+                              color: Colors.purple,
+                              fontWeight: FontWeight.w900,
+                              textStyle:
+                                  Theme.of(context).textTheme.displaySmall,
+                            ),
+                          ),
+                        ),
                       ),
-                      Text(
-                          "Giá : ${NumberFormat("#,###", "en_US")
-                                  .format(product?.price)} đ",
-                          style: const TextStyle(fontSize: 12)),
-
                       Center(
                         child: ElevatedButton(
-
                           onPressed: () {
                             if (product != null && _cart != null) {
                               String cartId = _cart!.id ??= "";
@@ -263,14 +275,16 @@ class _CartContainerState extends State<CartContainer> {
                                 _bloc.eventSink.add(UpdateCartEvent(
                                     idCart: cartId,
                                     idProduct: product.id,
-                                    quantity: product.quantity - product.quantity  as int));
+                                    quantity: product.quantity -
+                                        product.quantity as int));
                               }
                             }
-                          }, style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white, // Background color
-                        ),
-
-                          child: const Icon(FontAwesomeIcons.trashCan,
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white, // Background color
+                          ),
+                          child: const Icon(
+                            FontAwesomeIcons.trashCan,
                             color: Colors.black54, //<-- SEE HERE
                           ),
                         ),
@@ -278,7 +292,6 @@ class _CartContainerState extends State<CartContainer> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-
                           ElevatedButton(
                             onPressed: () {
                               if (product != null && _cart != null) {
@@ -290,10 +303,12 @@ class _CartContainerState extends State<CartContainer> {
                                       quantity: product.quantity - 1 as int));
                                 }
                               }
-                            },style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white, // Background color
-                          ),
-                            child: const Icon(FontAwesomeIcons.minus,
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white, // Background color
+                            ),
+                            child: const Icon(
+                              FontAwesomeIcons.minus,
                               color: Colors.black54, //<-- SEE HERE
                             ),
                           ),
@@ -305,7 +320,7 @@ class _CartContainerState extends State<CartContainer> {
                           ElevatedButton(
                             onPressed: () {
                               if (product != null && _cart != null) {
-                                String cartId = _cart!.id ??= "";
+                                final String cartId = _cart!.id ??= '';
                                 if (cartId.isNotEmpty) {
                                   _bloc.eventSink.add(UpdateCartEvent(
                                       idCart: cartId,
@@ -313,12 +328,14 @@ class _CartContainerState extends State<CartContainer> {
                                       quantity: product.quantity + 1 as int));
                                 }
                               }
-                            },style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white, // Background color
-                          ),
-                           child: const Icon(FontAwesomeIcons.add,
-                            color: Colors.black54, //<-- SEE HERE
-                          ),
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white, // Background color
+                            ),
+                            child: const Icon(
+                              FontAwesomeIcons.plus,
+                              color: Colors.black54, //<-- SEE HERE
+                            ),
                           )
                         ],
                       )

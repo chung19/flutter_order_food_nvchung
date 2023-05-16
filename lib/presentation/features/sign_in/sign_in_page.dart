@@ -1,28 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_order_food_nvchung/common/bases/base_widget.dart';
-import 'package:flutter_order_food_nvchung/common/constants/variable_constant.dart';
-import 'package:flutter_order_food_nvchung/common/widgets/progress_listener_widget.dart';
-import 'package:flutter_order_food_nvchung/data/datasources/remote/api_request.dart';
-import 'package:flutter_order_food_nvchung/data/repositories/authentication_repository.dart';
-import 'package:flutter_order_food_nvchung/presentation/features/sign_in/sign_in_bloc.dart';
-import 'package:flutter_order_food_nvchung/presentation/features/sign_in/sign_in_event.dart';
 import 'package:provider/provider.dart';
 
+import '../../../common/bases/base_widget.dart';
+import '../../../common/constants/variable_constant.dart';
+import '../../../common/utils/custom_textfield.dart';
 import '../../../common/utils/extension.dart';
 import '../../../common/widgets/loading_widget.dart';
+import '../../../common/widgets/progress_listener_widget.dart';
+import '../../../data/datasources/remote/api_request.dart';
+import '../../../data/repositories/authentication_repository.dart';
+import '../../resources/assets-manager.dart';
+import '../../resources/strings_manager.dart';
+import '../../resources/values_manager.dart';
+import 'sign_in_bloc.dart';
+import 'sign_in_event.dart';
 
 class SignInPage extends StatefulWidget {
+  const SignInPage({super.key});
+
   @override
   State<SignInPage> createState() => _SignInPageState();
 }
+
 class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
         backgroundColor: const Color(0xFF1ebd60),
-        title: const Center(child: Text("Sign In")),
+        title: const Center(child: Text('Sign In')),
       ),
       providers: [
         Provider(create: (context) => ApiRequest()),
@@ -47,7 +54,7 @@ class _SignInPageState extends State<SignInPage> {
 }
 
 class SignInContainer extends StatefulWidget {
-  const SignInContainer({Key? key}) : super(key: key);
+  const SignInContainer({super.key});
 
   @override
   State<SignInContainer> createState() => _SignInContainerState();
@@ -65,14 +72,20 @@ class _SignInContainerState extends State<SignInContainer> {
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _bloc.messageStream.listen((event) {
-        showMessage(context, "Thông báo", event);
+        showMessage(context, AppStrings.notify, event);
       });
     });
   }
 
   void handleButtonSignIn(String email, String password) {
     if (email.isEmpty || password.isEmpty) {
-      showMessage(context, "Thông báo", "Bạn chưa nhập đủ thông tin");
+      showMessage(
+          context, AppStrings.notify, AppStrings.doNotEnoughInformation);
+      return;
+    }
+    if (password.length < 8) {
+      showMessage(
+          context, AppStrings.notify, AppStrings.passwordLengthError);
       return;
     }
     _bloc.eventSink.add(SignInEvent(email: email, password: password));
@@ -80,7 +93,7 @@ class _SignInContainerState extends State<SignInContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: Colors.white,
       child: SafeArea(
         child: Stack(
@@ -91,7 +104,7 @@ class _SignInContainerState extends State<SignInContainer> {
                 child: Column(
                   children: [
                     Expanded(
-                        flex: 2, child: Image.asset("assets/images/ic_hello_food.png")),
+                        flex: 2, child: Image.asset(ImageAssets.IcHelloFood)),
                     Expanded(
                       flex: 4,
                       child: Container(
@@ -107,7 +120,8 @@ class _SignInContainerState extends State<SignInContainer> {
                                 return IgnorePointer(
                                   ignoring: snapshot.data ?? false,
                                   child: _buildButtonSignIn(() {
-                                    handleButtonSignIn(emailController.text, passwordController.text);
+                                    handleButtonSignIn(emailController.text,
+                                        passwordController.text);
                                   }),
                                 );
                               },
@@ -124,8 +138,10 @@ class _SignInContainerState extends State<SignInContainer> {
             ProgressListenerWidget<SignInBloc>(
               callback: (event) {
                 if (event is SignInSuccessEvent) {
-                  Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(event.message)));
+                  Navigator.pushReplacementNamed(
+                      context, VariableConstant.homeRoute);
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(event.message)));
                 }
               },
               child: Container(),
@@ -142,43 +158,49 @@ class _SignInContainerState extends State<SignInContainer> {
 
   Widget _buildTextSignUp() {
     return Container(
-        margin: const EdgeInsets.only(bottom: 10,left: 10, right: 10,top: 0),
+        margin: const EdgeInsets.only(
+          bottom: AppMargin.m10,
+          left: AppMargin.m10,
+          right: AppMargin.m10,
+        ),
         child: SingleChildScrollView(
           child: Row(
-             crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 0),
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(AppPadding.p10),
                 decoration: const BoxDecoration(
                     color: Color(0xff1b9696),
                     borderRadius: BorderRadius.all(Radius.circular(5))),
-                child: const Text("Don't have an account ?"),),
-              const SizedBox(width: 5,),
+                child: const Text(AppStrings.doNotHaveAccount),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
               InkWell(
-                onTap: () async{
+                onTap: () async {
                   try {
-                    var data = await Navigator.pushNamed(context, VariableConstant.signUpRoute) as Map;
+                    var data = await Navigator.pushNamed(
+                        context, VariableConstant.signUpRoute) as Map;
                     setState(() {
-                      emailController.text = data["email"];
-                      passwordController.text = data["password"];
+                      emailController.text = data['email'];
+                      passwordController.text = data['password'];
                     });
                   } catch (e) {
-                    showMessage(context, "Thông báo", e.toString());
+                    showMessage(context, AppStrings.notify, e.toString());
                     return;
                   }
                 },
-
                 child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 0),
                   padding: const EdgeInsets.all(10),
                   decoration: const BoxDecoration(
                       color: Color(0xFF3ac5c9),
                       borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: const Text("Sign Up !",
+                  child: const Text(AppStrings.signUp,
                       style: TextStyle(
-                          color: Color(0xFF536251), )),
+                        color: Color(0xFF536251),
+                      )),
                 ),
               )
             ],
@@ -187,82 +209,50 @@ class _SignInContainerState extends State<SignInContainer> {
   }
 
   Widget _buildEmailTextField() {
-    return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10),
-      child: TextField(
-        maxLines: 1,
-        controller: emailController,
-        keyboardType: TextInputType.emailAddress,
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          fillColor: Colors.black12,
-          filled: true,
-          hintText: "Email",
-          labelStyle: const TextStyle(color: Colors.blue),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(width: 0, color: Colors.black12)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(width: 0, color: Colors.black12)),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(width: 0, color: Colors.black12)),
-          prefixIcon: const Icon(Icons.email, color: Colors.blue),
-        ),
+    return CustomTextField(
+      controller: emailController,
+      keyboardType: TextInputType.emailAddress,
+      textInputAction: TextInputAction.next,
+      hintText: AppStrings.email,
+      icon: const Icon(
+        Icons.email,
+        color: Colors.blue,
       ),
     );
   }
 
   Widget _buildPasswordTextField() {
-    return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10),
-      child: TextField(
-        maxLines: 1,
-        obscureText: true,
-        controller: passwordController,
-        keyboardType: TextInputType.text,
-        textInputAction: TextInputAction.done,
-        decoration: InputDecoration(
-          fillColor: Colors.black12,
-          filled: true,
-          hintText: "PassWord",
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(width: 0, color: Colors.black12)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(width: 0, color: Colors.black12)),
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(5),
-              borderSide: const BorderSide(width: 0, color: Colors.black12)),
-          labelStyle: const TextStyle(color: Colors.blue),
-          prefixIcon: const Icon(Icons.lock, color: Colors.blue),
-        ),
+    return CustomTextField(
+      controller: passwordController,
+      keyboardType: TextInputType.text,
+      textInputAction: TextInputAction.unspecified,
+      hintText: AppStrings.password,
+      obscureText: true, // enable (true) /disable hide password
+      icon: const Icon(
+        Icons.lock,
       ),
     );
   }
 
   Widget _buildButtonSignIn(Function onPress) {
     return Container(
-        margin: const EdgeInsets.only(top: 0),
         child: ElevatedButtonTheme(
             data: ElevatedButtonThemeData(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith((states) {
-                    if (states.contains(MaterialState.pressed)) {
-                      return Colors.blue[500];
-                    } else if (states.contains(MaterialState.disabled)) {
-                      return Colors.grey;
-                    }
-                    return Colors.blueAccent;
-                  }),
-                  elevation: MaterialStateProperty.all(5),
-                  padding: MaterialStateProperty.all(
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 100)),
-                )),
+              backgroundColor: MaterialStateProperty.resolveWith((states) {
+                if (states.contains(MaterialState.pressed)) {
+                  return Colors.blue[500];
+                } else if (states.contains(MaterialState.disabled)) {
+                  return Colors.grey;
+                }
+                return Colors.blueAccent;
+              }),
+              elevation: MaterialStateProperty.all(5),
+              padding: MaterialStateProperty.all(
+                  const EdgeInsets.symmetric(vertical: 5, horizontal: 100)),
+            )),
             child: ElevatedButton(
-              child: const Text("Login",
+              child: const Text(AppStrings.login,
                   style: TextStyle(fontSize: 18, color: Colors.white)),
               onPressed: () => onPress(),
             )));

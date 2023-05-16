@@ -8,10 +8,12 @@ class AppCache {
     return _prefs!;
   }
 
-  static String getString(String key) => _prefs?.getString(key) ?? "";
+  static String getString(String key) => _prefs?.getString(key) ?? '';
 
-  static void setString({String key = "", String value = ""}) {
-    if (value.isEmpty || key.isEmpty) return;
+  static void setString({String key = '', String value = ''}) {
+    if (value.isEmpty || key.isEmpty) {
+      return;
+    }
     _prefs?.setString(key, value);
   }
 }

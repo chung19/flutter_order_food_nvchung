@@ -7,57 +7,57 @@ import 'dio_client.dart';
 
 
 class ApiRequest {
-  late Dio _dio;
 
   ApiRequest() {
     _dio = DioClient.instance.dio;
   }
+  late Dio _dio;
 
-  Future signIn(String email, String password) {
+  Future<dynamic> signIn(String email, String password) {
     return _dio.post(ApiConstant.signInUrl,
-        data: {"email": email, "password": password});
+        data: {'email': email, 'password': password});
   }
 
-  Future signUp(String email, String name, String phone, String password,
+  Future<dynamic> signUp(String email, String name, String phone, String password,
       String address) {
     return _dio.post(ApiConstant.signUpUrl, data: {
-      "email": email,
-      "password": password,
-      "phone": phone,
-      "name": name,
-      "address": address
+      'email': email,
+      'password': password,
+      'phone': phone,
+      'name': name,
+      'address': address
     });
   }
 
-  Future getProducts() {
+  Future<dynamic> getProducts() {
     return _dio.get(ApiConstant.listProductUrl);
   }
 
-  Future getCart() {
+  Future<dynamic>  getCart() {
     return _dio.get(ApiConstant.cartUrl);
   }
 
-  Future getOrder() {
+  Future<dynamic>  getOrder( ) {
     return _dio.get(ApiConstant.orderHistoryCart);
   }
 
-  Future addCart(String idProduct) {
-    return _dio.post(ApiConstant.addCartUrl, data: {"id_product": idProduct});
+  Future<dynamic>  addCart(String idProduct) {
+    return _dio.post(ApiConstant.addCartUrl, data: {'id_product': idProduct});
   }
 
-  Future updateCart(String idCart, int quantity, String idProduct) {
+  Future<dynamic>  updateCart(String idCart, int quantity, String idProduct) {
 
    return _dio.post(ApiConstant.updateCartUrl, data: {
-      "id_product": idProduct,
-      "id_cart": idCart,
-      "quantity": quantity
+      'id_product': idProduct,
+      'id_cart': idCart,
+      'quantity': quantity
     });
 
   }
 
-  Future confirmCard (String idCart ) {
+  Future<dynamic>  confirmCard (String idCart ) {
   return  _dio.post(ApiConstant.conformCartUrl,
-        data: {"id_cart": idCart, "status": false});
+        data: {'id_cart': idCart, 'status': false});
 
   }
 }

@@ -5,29 +5,22 @@ import 'package:provider/single_child_widget.dart';
 class PageContainer extends StatelessWidget {
   final Widget child;
   final List<SingleChildWidget> providers;
-  AppBar? appBar;
+  final AppBar? appBar;
 
-  PageContainer({required this.child, required this.providers, this.appBar});
+  PageContainer(
+      {super.key, required this.child, required this.providers, this.appBar});
 
   @override
   Widget build(BuildContext context) {
-    return shouldRenderPage();
-  }
-
-  Widget shouldRenderPage() {
-    if (providers.isNotEmpty) {
-      return MultiProvider(
-        providers: [...providers],
-        child: Scaffold(
-          appBar: appBar,
-          body: child,
-        ),
-      );
-    } else {
-      return Scaffold(
+// Tối ưu hàm shouldRenderPage bằng cách truyền providers vào MultiProvider trực tiếp
+    return MultiProvider(
+      providers: providers,
+      child: Scaffold(
         appBar: appBar,
         body: child,
-      );
-    }
+      ),
+    );
   }
 }
+
+// Xóa hàm shouldRenderPage vì nó không còn cần thiết nữa

@@ -1,5 +1,5 @@
 class ProductDto {
-  ProductDto({
+const ProductDto({
       this.id, 
       this.name, 
       this.address, 
@@ -9,26 +9,28 @@ class ProductDto {
       this.gallery
   });
 
-  ProductDto.fromJson(dynamic json) {
-    id = json['_id'];
-    name = json['name'];
-    address = json['address'];
-    price = json['price'];
-    img = json['img'];
-    quantity = json['quantity'];
-    gallery = json['gallery'] != null ? json['gallery'].cast<String>() : [];
+  factory ProductDto.fromJson(Map<String,dynamic> json) {
+    return ProductDto(
+    id : json['_id'],
+    name : json['name'],
+    address : json['address'],
+    price : json['price'],
+    img : json['img'],
+    quantity : json['quantity'],
+    gallery : json['gallery'] != null ? json['gallery'].cast<String>() : [],
+    );
   }
 
-  String? id;
-  String? name;
-  String? address;
-  num? price;
-  String? img;
-  num? quantity;
-  List<String>? gallery;
+ final String? id;
+   final String? name;
+   final String? address;
+   final num? price;
+   final String? img;
+   final num? quantity;
+    final List<String>? gallery;
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
+    final Map<String, dynamic> map = <String, dynamic>{};
     map['_id'] = id;
     map['name'] = name;
     map['address'] = address;
@@ -42,12 +44,10 @@ class ProductDto {
   static List<ProductDto> convertJson(dynamic json) {
     return (json as List).map((e) => ProductDto.fromJson(e)).toList();
   }
+
+  @override
+  String toString() {
+    return 'ProductDto{id: $id, name: $name, address: $address, price: $price, img: $img, quantity: $quantity, gallery: $gallery}';
+  }
 }
 
-// List myMap(List<dynamic> list, Function function) {
-//   List<dynamic> newList = [];
-//   for (int i = 0; i < list.length ; i++) {
-//     newList.add(function(list[i]));
-//   }
-//   return newList;
-// }
