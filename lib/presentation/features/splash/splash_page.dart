@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,26 +13,37 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 class _SplashPageState extends State<SplashPage> {
+  final _duration = const Duration(seconds: 2);
   @override
   void initState() {
     super.initState();
-    _checkFirstRun(context);
+    _startTime();
   }
 
-  Future<void> _checkFirstRun(BuildContext context) async {
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-        // Future.delayed(Duration(seconds: 2), (){
-     bool firstRun = prefs.getBool('firstRun') ?? true;
-     String token = AppCache.getString(VariableConstant.token);
-      if (firstRun && context.mounted) {
-        prefs.setBool('firstRun', false);
-        Navigator.pushReplacementNamed(context, VariableConstant.introRoute);
-      } else if (token.isNotEmpty) {
-        Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
+  Future<void> _startTime() async {
+    final prefs = await SharedPreferences.getInstance();
+    final firstRun = prefs.getBool('firstRun') ?? true;
+    await Future.delayed(_duration);
+    if (firstRun) {
+      prefs.setBool('firstRun', false);
+      navigationPageIntro();
+    } else {
+      final token = AppCache.getString(VariableConstant.token);
+      if (token.isNotEmpty) {
+        navigationPageHome();
       } else {
-        Navigator.pushReplacementNamed(context, VariableConstant.signInRoute);
+        navigationPageLogin();
       }
-    // });
+    }
+  }
+  void navigationPageHome(){
+  Navigator.pushReplacementNamed(context, VariableConstant.homeRoute);
+}
+  void navigationPageLogin(){
+    Navigator.pushReplacementNamed(context, VariableConstant.signInRoute);
+  }
+  void navigationPageIntro(){
+    Navigator.pushReplacementNamed(context, VariableConstant.introRoute);
   }
 
 
@@ -53,15 +66,16 @@ class _SplashPageState extends State<SplashPage> {
               ),
             ),
             Column(
-              children: const [
-                Text(
-                  AppStrings.appName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 50,
-                    color: Colors.white,
-                  ),
-                ),
+              children:  [
+               AnimatedTextKit(
+            animatedTexts: [
+              TyperAnimatedText(AppStrings.appName),
+              ScaleAnimatedText(AppStrings.appName),
+
+
+
+          ],
+        ),
               ],
             ),
           ],

@@ -32,59 +32,60 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var gallery = ApiConstant.baseUrl;
-  late ScrollController _scrollController;
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
+
   }
 
   Future<void> handleButtonSignOut() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
+    if(context.mounted){
+      return showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Text(
+                          AppStrings.cancel,
+                          style: TextStyle(color: Colors.grey[400], fontSize: 16),
+                        )),
+                    TextButton(
+                      onPressed: () {
+                        preferences.clear();
+                        preferences.setBool('firstRun', false);
+                        print(AppStrings.logout);
 
-    return showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(
-                        AppStrings.cancel,
-                        style: TextStyle(color: Colors.grey[400], fontSize: 16),
-                      )),
-                  TextButton(
-                    onPressed: () {
-                      preferences.clear();
-                      preferences.setBool('firstRun', false);
-                      print(AppStrings.logout);
-                      Navigator.pushReplacementNamed(
-                          context, VariableConstant.signInRoute);
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 5,
-                      ),
-                      padding: const EdgeInsets.fromLTRB(8, 10, 4, 10),
-                      decoration: const BoxDecoration(
-                          color: Color(0xFFF10808),
-                          borderRadius: BorderRadius.all(Radius.circular(30))),
-                      child: Text(
-                        AppStrings.quit,
-                        style: GoogleFonts.antonio(
-                          color: const Color(0xFFF1F5F1),
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, VariableConstant.signInRoute, (route) => false);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 5,
+                        ),
+                        padding: const EdgeInsets.fromLTRB(8, 10, 4, 10),
+                        decoration: const BoxDecoration(
+                            color: Color(0xFFF10808),
+                            borderRadius: BorderRadius.all(Radius.circular(30))),
+                        child: Text(
+                          AppStrings.quit,
+                          style: GoogleFonts.antonio(
+                            color: const Color(0xFFF1F5F1),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        });
+                  ],
+                ),
+              ],
+            );
+          });
+    }
   }
 
   @override

@@ -11,6 +11,7 @@ import 'package:flutter_order_food_nvchung/presentation/plugin/Intro.dart';
 import 'common/constants/variable_constant.dart';
 import 'data/datasources/local/cache/app_cache.dart';
 import 'presentation/features/cart/cart_page.dart';
+import 'presentation/features/home/test_button.dart';
 import 'presentation/features/splash/splash_page.dart';
 
 void main() {
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         // '/anim': (context) => Ball(),
+        '/test': (context) =>  TestButton(),
         VariableConstant.signInRoute: (context) => SignInPage(),
         VariableConstant.signUpRoute: (context) => SignUpPage(),
         VariableConstant.homeRoute: (context) => HomePage(),
@@ -45,7 +47,8 @@ class MyApp extends StatelessWidget {
         VariableConstant.orderRoute: (context) => OrderPage(),
         VariableConstant.introRoute: (context) => Intro(),
       },
-      initialRoute: VariableConstant.introRoute,
+    initialRoute: VariableConstant.splashRoute,
+      // initialRoute: '/test',
     );
 
   }

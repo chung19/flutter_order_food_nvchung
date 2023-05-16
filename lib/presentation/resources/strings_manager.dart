@@ -1,6 +1,19 @@
 class AppStrings {
   AppStrings._();
   static const String appName = 'Foodo';
+  static const String titleIntro1 = 'Welcome to Food Paradis';
+  static const String bodyIntro1 = 'Here we provide delicious dishes from fresh foo';
+  static const String titleIntro2 = 'Cheap tasty tonic';
+  static const String bodyIntro2 = 'As our store selection criteria';
+  static const String footerIntro2 = 'Let is Experience Together';
+  static const String titleIntro3 = 'Easy 1-touch payment';
+  static const String bodyIntro3 = 'Convenience';
+  static const String footerIntro3 = 'Fast';
+  static const String titleIntro4 = 'Happy Food';
+  static const String bodyIntro4 = 'Touch is suck';
+  static const String footerIntro4 = 'Eat Now';
+
+
   static const String passwordLengthError = 'password must be at least 8 characters  ';
   static const String doNotHaveAccount = "Don't have an account ?";
   static const String signUp = 'Sign Up';

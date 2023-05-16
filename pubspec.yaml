@@ -46,12 +46,11 @@ dependencies:
   carousel_slider: ^4.1.1
   dependencies:
   introduction_screen: ^3.1.8
-  is_first_run: ^1.0.0
-  flutter_screenutil: ^5.5.4
   google_fonts: ^3.0.1
   font_awesome_flutter: ^10.2.1
   device_preview: ^1.1.0
-  flutter_riverpod: ^2.3.6
+#  flutter_riverpod: ^2.3.6
+  animated_text_kit: ^4.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
