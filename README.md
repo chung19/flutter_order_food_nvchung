@@ -4,20 +4,14 @@
  
 MVVM  , Clean Architecture , Restful API
 
-Initialize api request then pass api request to repository from repository call to bloc, then return response communicated via event(compare data types using equatable) and return data in stream builder Main Libary :
+Initialize api request
 
-Provider,RXDark,Dio,,Equatable...
-=======
-#Use proxy Provider and bloc ( based on the bloc's data transmission and collection mechanism) 
-call api layer by layer
+then pass api request to repository from repository call to bloc,
+then return response communicated via event(compare data types using equatable)
+and return data in stream builder
+Main Libary :
 
-Initialize api request 
-then pass api request to repository
-from repository call to bloc, 
-then return response communicated via event(compare data types using equatable) and return data in stream builder
- Main Libary :
- 
- Provider,RXDark,Dio,Build_Runner,Equatable...
- 
+Provider,RXDark,Dio,Equatable...
+
  
 
