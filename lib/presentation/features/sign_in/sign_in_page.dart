@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-
 import '../../../common/bases/base_widget.dart';
 import '../../../common/constants/variable_constant.dart';
 import '../../../common/utils/custom_textfield.dart';
