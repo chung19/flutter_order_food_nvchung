@@ -1,16 +1,8 @@
-# flutter_order_food_nvchung
 
-A new Flutter project.
+#Use proxy Provider and bloc ( based on the bloc pattern's data transmission and collection mechanism) call api layer by layer
 
-## Getting Started
+MVVM  , Clean Architecture , Restful API
 
-This project is a starting point for a Flutter application.
+Initialize api request then pass api request to repository from repository call to bloc, then return response communicated via event(compare data types using equatable) and return data in stream builder Main Libary :
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Fnlutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Provider,RXDark,Dio,,Equatable...
