@@ -1,7 +1,6 @@
 // @dart=2.9
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_order_food_nvchung/presentation/features/home/Animation.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/home/home_page.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/order/order_page.dart';
 import 'package:flutter_order_food_nvchung/presentation/features/sign_in/sign_in_page.dart';
@@ -11,7 +10,6 @@ import 'package:flutter_order_food_nvchung/presentation/plugin/Intro.dart';
 import 'common/constants/variable_constant.dart';
 import 'data/datasources/local/cache/app_cache.dart';
 import 'presentation/features/cart/cart_page.dart';
-import 'presentation/features/home/test_button.dart';
 import 'presentation/features/splash/splash_page.dart';
 
 void main() {
@@ -31,14 +29,14 @@ class MyApp extends StatelessWidget {
       useInheritedMediaQuery: true,
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'QuickSan',
         primarySwatch: Colors.blue,
       ),
       routes: {
         // '/anim': (context) => Ball(),
-        '/test': (context) =>  TestButton(),
+        // '/test': (context) =>  TestButton(),
         VariableConstant.signInRoute: (context) => SignInPage(),
         VariableConstant.signUpRoute: (context) => SignUpPage(),
         VariableConstant.homeRoute: (context) => HomePage(),
@@ -47,9 +45,8 @@ class MyApp extends StatelessWidget {
         VariableConstant.orderRoute: (context) => OrderPage(),
         VariableConstant.introRoute: (context) => Intro(),
       },
-    initialRoute: VariableConstant.splashRoute,
+      initialRoute: VariableConstant.splashRoute,
       // initialRoute: '/test',
     );
-
   }
 }

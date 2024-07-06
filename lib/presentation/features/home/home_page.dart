@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../common/bases/base_widget.dart';
 import '../../../common/constants/api_constant.dart';
 import '../../../common/constants/style_constant.dart';
@@ -35,12 +36,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
   }
 
   Future<void> handleButtonSignOut() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
-    if(context.mounted){
+    if (context.mounted) {
       return showDialog(
           context: context,
           builder: (_) {
@@ -53,7 +53,8 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () => Navigator.pop(context),
                         child: Text(
                           AppStrings.cancel,
-                          style: TextStyle(color: Colors.grey[400], fontSize: 16),
+                          style:
+                              TextStyle(color: Colors.grey[400], fontSize: 16),
                         )),
                     TextButton(
                       onPressed: () {
@@ -61,8 +62,8 @@ class _HomePageState extends State<HomePage> {
                         preferences.setBool('firstRun', false);
                         print(AppStrings.logout);
 
-                        Navigator.pushNamedAndRemoveUntil(
-                            context, VariableConstant.signInRoute, (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(context,
+                            VariableConstant.signInRoute, (route) => false);
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(
@@ -71,7 +72,8 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.fromLTRB(8, 10, 4, 10),
                         decoration: const BoxDecoration(
                             color: Color(0xFFF10808),
-                            borderRadius: BorderRadius.all(Radius.circular(30))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30))),
                         child: Text(
                           AppStrings.quit,
                           style: GoogleFonts.antonio(
@@ -92,7 +94,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return PageContainer(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1ebd60),
+        backgroundColor: const Color(0xFFEC572B),
         title: const Center(
           child: Text('Home'),
         ),
@@ -111,6 +113,10 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.home),
+          ),
           IconButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/order');
@@ -237,7 +243,7 @@ class _HomeContainerState extends State<HomeContainer> {
                       decoration: BoxDecoration(
                         color: const Color(0xFFA22617),
                         border: Border.all(
-                          color: Colors.purple,
+                          color: const Color(0xFFedb8c7),
                           width: 2,
                         ),
                       ),
@@ -309,7 +315,7 @@ class _HomeContainerState extends State<HomeContainer> {
                     ),
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.purple,
+                        color: const Color(0xFF0152df),
                         width: 2,
                       ),
                     ),
@@ -318,7 +324,7 @@ class _HomeContainerState extends State<HomeContainer> {
                       "\$ : ${NumberFormat("#,###", "en_US").format(product.price)} VND",
                       style: GoogleFonts.amita(
                         fontSize: 20,
-                        color: const Color(0xFFB41CD1),
+                        color: const Color(0xFF0152df),
                         fontWeight: FontWeight.w900,
                         textStyle: Theme.of(context).textTheme.displaySmall,
                       ),
@@ -470,16 +476,16 @@ class _HomeContainerState extends State<HomeContainer> {
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.purple,
+                              color: const Color(0xFF0152df),
                               width: 2,
                             ),
                           ),
                           child: Text(
                             '\$: ${NumberFormat("#,###", "en_US").format(product.price)} VND',
                             style: const TextStyle(
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w400,
                               fontSize: 14,
-                              color: Colors.purple,
+                              color: Color(0xFF0152df),
                             ),
                           ),
                         ),

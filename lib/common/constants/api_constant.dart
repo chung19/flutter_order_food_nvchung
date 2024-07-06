@@ -1,6 +1,6 @@
 class ApiConstant {
   ApiConstant._();
-  static const String baseUrl = 'https://serverappsale.onrender.com/';
+  static const String baseUrl = "https://serverappsale.onrender.com/";
   // End Point
   static const String signInUrl = '/user/sign-in';
   static const String signUpUrl = '/user/sign-up';
